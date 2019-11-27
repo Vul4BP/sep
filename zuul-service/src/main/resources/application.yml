@@ -1,0 +1,44 @@
+management:
+  endpoint:
+    routes:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    prefer-ip-address: true
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka-peer1:8761/eureka,http://eureka-peer2:8762/eureka
+
+spring:
+  application:
+    name: zuul-server
+
+server:
+  ssl:
+    enabled: true
+    key-store: classpath:identity.jks
+    key-password: secret
+    key-store-password: secret
+    trust-store: classpath:truststore.jks
+    trust-store-password: secret
+    client-auth: need
+---
+spring:
+  profiles: peer1
+server:
+  port: 8771
+---
+spring:
+  profiles: peer2
+server:
+  port: 8772
