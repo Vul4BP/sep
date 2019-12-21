@@ -1,8 +1,8 @@
 package com.example.seller.controller;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 public class SellerController {
@@ -12,8 +12,9 @@ public class SellerController {
     @Value("${app.id}")
     String  instance;
 
-    @RequestMapping("/")
-    public String helloFromTestApi(){
-        return "Seller service. Hello from instance = " + instance;
+    //@RequestMapping("/")
+    @PostMapping("/")
+    public String helloFromTestApi(@RequestBody String paymentMethod){
+        return "Seller service. Hello from instance = " + paymentMethod;
     }
 }
