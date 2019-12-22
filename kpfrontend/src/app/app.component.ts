@@ -20,7 +20,7 @@ export class AppComponent {
     if (!form.valid) {
       return false;
     } else {
-      this.kpService.postPaymentMethod(form.value)
+      this.kpService.postPaymentMethod(form.value)  
         .subscribe(data => alert(data));
     }
   }

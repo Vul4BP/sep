@@ -57,26 +57,17 @@ public class ClientAppApplication {
         //---------------Paypal-----------------
         for(int i = 0;i<4;i++) {
             RestTemplate rt = restTemplate();
-            String fooResourceUrl = "https://localhost:8443/paypalservice";
-            ResponseEntity<String> response = rt.getForEntity(fooResourceUrl, String.class);
+            //String fooResourceUrl = "https://localhost:8443/paypalservice/getjson";
+            //String fooResourceUrl1 = "https://localhost:8443/bitcoinservice";
+            String fooResourceUrl2 = "https://localhost:8443/sellerservice/getjson";
+
+
+            ResponseEntity<String> response = rt.getForEntity(fooResourceUrl2, String.class);
             System.out.println(response.getBody());
         }
 
-        //---------------Bitcoin-----------------
-        for(int i = 0;i<4;i++) {
-            RestTemplate rt1 = restTemplate();
-            String fooResourceUrl1 = "https://localhost:8443/bitcoinservice";
-            ResponseEntity<String> response1 = rt1.getForEntity(fooResourceUrl1, String.class);
-            System.out.println(response1.getBody());
-        }
 
-        //---------------Seller-----------------
-        for(int i = 0;i<4;i++) {
-            RestTemplate rt2 = restTemplate();
-            String fooResourceUrl2 = "https://localhost:8443/sellerservice";
-            ResponseEntity<String> response2 = rt2.getForEntity(fooResourceUrl2, String.class);
-            System.out.println(response2.getBody());
-        }
+
 
     }
 }
