@@ -44,6 +44,7 @@ public class NcbackendApplication {
         return new RestTemplate(requestFactory);
     }
 
+    /*
     @PostConstruct
     private void init() throws Exception {
         //---------------Paypal-----------------
@@ -56,5 +57,5 @@ public class NcbackendApplication {
             ResponseEntity<String> response = rt.getForEntity(fooResourceUrl2, String.class);
             System.out.println(response.getBody());
         }
-    }
+    }*/
 }
