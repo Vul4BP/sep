@@ -21,28 +21,41 @@ keytool -keystore /home/vula/Desktop/sep/zuul-service/src/main/resources/trustst
 #--------------DEO-ZA-FRONT-----------------
 
 #kreiraj cert za front kp
-keytool -genkeypair -keyalg RSA -keysize 3072 -alias frontkp -dname "CN=BACKAPALANKAJENAJJACA,OU=Development,O=FRONTKP,C=NL" -ext "SAN:c=DNS:localhost,IP:127.0.0.1" -validity 3650 -keystore /home/vula/Desktop/sep/kpfrontend/ssl/identity.jks -storepass secret -keypass secret -deststoretype pkcs12
+keytool -genkeypair -keyalg RSA -keysize 3072 -alias frontkp -dname "CN=BACKAPALANKAJENAJJACA,OU=Development,O=FRONTKP,C=NL" -ext "SAN:c=DNS:localhost,IP:127.0.0.1" -validity 3650 -keystore /home/vula/Desktop/sep/ssl/identity.jks -storepass secret -keypass secret -deststoretype pkcs12
 
 #izvuci frontkp.cer iz identity.jks od frontkp
-keytool -exportcert -keystore /home/vula/Desktop/sep/kpfrontend/ssl/identity.jks -storepass secret -alias frontkp -rfc -file /home/vula/Desktop/sep/kpfrontend/ssl/frontkp.cer
+keytool -exportcert -keystore /home/vula/Desktop/sep/ssl/identity.jks -storepass secret -alias frontkp -rfc -file /home/vula/Desktop/sep/ssl/frontkp.cer
 
 #ubaci u truststore od kp cert od frontkp
-keytool -keystore /home/vula/Desktop/sep/zuul-service/src/main/resources/truststore.jks -importcert -file /home/vula/Desktop/sep/kpfrontend/ssl/frontkp.cer -alias frontkp -storepass secret
+keytool -keystore /home/vula/Desktop/sep/zuul-service/src/main/resources/truststore.jks -importcert -file /home/vula/Desktop/sep/ssl/frontkp.cer -alias frontkp -storepass secret
 
 #izvlacenje .p12 iz identity.jks od frontkp
 keytool -importkeystore \
-    -srckeystore /home/vula/Desktop/sep/kpfrontend/ssl/identity.jks \
-    -destkeystore /home/vula/Desktop/sep/kpfrontend/ssl/keystore.p12 \
+    -srckeystore /home/vula/Desktop/sep/ssl/identity.jks \
+    -destkeystore /home/vula/Desktop/sep/ssl/keystore.p12 \
     -deststoretype PKCS12 \
     -srcalias frontkp \
     -deststorepass secret \
     -destkeypass secret
 
 #izvlacenje frontkp.crt
-openssl pkcs12 -in /home/vula/Desktop/sep/kpfrontend/ssl/keystore.p12 -nokeys -out /home/vula/Desktop/sep/kpfrontend/ssl/frontkp.crt
+openssl pkcs12 -in /home/vula/Desktop/sep/ssl/keystore.p12 -nokeys -out /home/vula/Desktop/sep/ssl/frontkp.crt
 
 #izvlacenje frontkp.key
-openssl pkcs12 -in /home/vula/Desktop/sep/kpfrontend/ssl/keystore.p12 -nocerts -nodes -out /home/vula/Desktop/sep/kpfrontend/ssl/frontkp.key
+openssl pkcs12 -in /home/vula/Desktop/sep/ssl/keystore.p12 -nocerts -nodes -out /home/vula/Desktop/sep/ssl/frontkp.key
 
 #importuj sertifikat u browser
-pk12util -d sql:$HOME/.pki/nssdb -i /home/vula/Desktop/sep/kpfrontend/ssl/keystore.p12
+pk12util -d sql:$HOME/.pki/nssdb -i /home/vula/Desktop/sep/ssl/keystore.p12
+
+#kopiraj sertifikat u sve foldere od frnt
+cp -i /home/vula/Desktop/sep/ssl/frontkp.crt /home/vula/Desktop/sep/bankfrontend
+cp -i /home/vula/Desktop/sep/ssl/frontkp.key /home/vula/Desktop/sep/bankfrontend
+
+cp -i /home/vula/Desktop/sep/ssl/frontkp.crt /home/vula/Desktop/sep/bitcoinfrontend
+cp -i /home/vula/Desktop/sep/ssl/frontkp.key /home/vula/Desktop/sep/bitcoinfrontend
+
+cp -i /home/vula/Desktop/sep/ssl/frontkp.crt /home/vula/Desktop/sep/paypalfrontend
+cp -i /home/vula/Desktop/sep/ssl/frontkp.key /home/vula/Desktop/sep/paypalfrontend
+
+cp -i /home/vula/Desktop/sep/ssl/frontkp.crt /home/vula/Desktop/sep/kpfrontend
+cp -i /home/vula/Desktop/sep/ssl/frontkp.key /home/vula/Desktop/sep/kpfrontend

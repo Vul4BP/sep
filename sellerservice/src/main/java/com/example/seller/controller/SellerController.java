@@ -29,28 +29,12 @@ public class SellerController {
     @PostMapping("paymentmethod")
     public String helloFromTestApi(@RequestBody String paymentMethod){
         JsonObject jsonObject = new JsonParser().parse(paymentMethod).getAsJsonObject();
-        return "Seller service. Hello from instance = " + instance + ". You picked to use " + jsonObject.get("payment") + " for payment.";
+        //return "Seller service. Hello from instance = " + instance + ". You picked to use " + jsonObject.get("payment") + " for payment.";
+        //String method = jsonObject.get("payment").toString();
+
+        String json = "{ \"result\": " + jsonObject.get("payment").toString() + " }";
+        return  json;
     }
 
-    @PostMapping("magazinename")
-    public List<String> PostMagazineName(@RequestBody String magazinename){
 
-        List<String> retunList = new ArrayList();
-
-        if(magazinename.equals("Magazine1")){
-            retunList.add("paypal");
-            retunList.add("bitcoin");
-            retunList.add("banka");
-        }else if(magazinename.equals("Magazine2")){
-            retunList.add("paypal");
-            retunList.add("bitcoin");
-        }else if(magazinename.equals("Magazine3")){
-            retunList.add("paypal");
-        }else {
-
-        }
-
-        return retunList;
-
-    }
 }
