@@ -21,6 +21,6 @@ public class BitcoinController {
     @RequestMapping(value="getjson",method = RequestMethod.GET)
     public  String getJSON()
     {
-        return "JSON from Bitcoin service. Hello from instance = " + instance;
+        return "{ \"msg\" : \"JSON from Bitcoin service\", \"instance\" : \"" + instance + "\" }";
     }
 }

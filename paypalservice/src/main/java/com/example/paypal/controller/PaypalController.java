@@ -22,7 +22,7 @@ public class PaypalController {
     @RequestMapping(value="getjson",method = RequestMethod.GET)
     public  String getJSON()
     {
-        return "JSON from Paypal service. Hello from instance = " + instance;
+        return "{ \"msg\" : \"JSON from Paypal service\", \"instance\" : \"" + instance + "\" }";
     }
 
 }

@@ -27,11 +27,9 @@ public class SellerController {
     }
 
     @PostMapping("paymentmethod")
-    public String helloFromTestApi(@RequestBody String paymentMethod){
+    public String checkPaymentMethod(@RequestBody String paymentMethod){
         JsonObject jsonObject = new JsonParser().parse(paymentMethod).getAsJsonObject();
-        //return "Seller service. Hello from instance = " + instance + ". You picked to use " + jsonObject.get("payment") + " for payment.";
-        //String method = jsonObject.get("payment").toString();
-
+        //logika da se proveri da li je izabrani nacin placanja omogucen za dati casopis
         String json = "{ \"result\": " + jsonObject.get("payment").toString() + " }";
         return  json;
     }

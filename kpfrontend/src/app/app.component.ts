@@ -14,7 +14,6 @@ export class AppComponent {
   constructor(private kpService: KpService) {
   }
 
-
   submitForm(form: NgForm) {
     this.isSubmitted = true;
     if (!form.valid) {
@@ -25,11 +24,11 @@ export class AppComponent {
           console.log(data);
           let route = "";
           if(data.result == "bank")
-            route = "http://localhost:5002";
+            route = "https://localhost:5002";
           else if(data.result == "paypal")
-            route = "http://localhost:5003";
+            route = "https://localhost:5003";
           else if(data.result == "bitcoin")
-            route = "http://localhost:5001";
+            route = "https://localhost:5001";
           
           console.log(route);
           window.location.replace(route);
