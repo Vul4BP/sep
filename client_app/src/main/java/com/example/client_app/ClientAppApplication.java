@@ -65,9 +65,5 @@ public class ClientAppApplication {
             ResponseEntity<String> response = rt.getForEntity(fooResourceUrl2, String.class);
             System.out.println(response.getBody());
         }
-
-
-
-
     }
 }

@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: nt-gateway
+---
+server:
+  port: 5005
+  #ssl:
+    #enabled: true
+    #key-store: classpath:identity.jks
+    #key-password: secret
+    #key-store-password: secret
+    #trust-store: classpath:truststore.jks
+    #trust-store-password: secret
