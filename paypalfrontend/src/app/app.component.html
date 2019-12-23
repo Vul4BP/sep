@@ -1,16 +1,25 @@
 <h1>Paypal frontend!!!</h1>
 
 <form #f="ngForm" (submit)="submitForm(f)" novalidate>
-  
+  <div>
+    <label class="custom-control-label" for="username">Username: </label>
+    <input id="username" type="text" class="custom-control-input" value="username" name="username" ngModel required>
+  </div>
+
+  <div>
+    <label class="custom-control-label" for="userpassword">Password: </label>
+    <input id="userpassword" type="password" class="custom-control-input" value="userpassword" name="userpassword" ngModel required>
+  </div>
+
     <div>
-      <label class="custom-control-label" for="price">Price: </label> 
+      <label class="custom-control-label" for="price">Price: </label>
       <input id="price" type="text" class="custom-control-input" value="price" name="price" ngModel required>
     </div>
-  
+
     <div *ngIf="isSubmitted && f.invalid">
       <p>Please select either value</p>
     </div>
-  
-  
+
+
     <button type="submit" class="btn btn-danger btn-lg btn-block">Buy</button>
   </form>

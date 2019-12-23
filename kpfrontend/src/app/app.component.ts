@@ -19,17 +19,20 @@ export class AppComponent {
     if (!form.valid) {
       return false;
     } else {
-      this.kpService.postPaymentMethod(form.value)  
+      this.kpService.postPaymentMethod(form.value)
         .subscribe(data => {
           console.log(data);
-          let route = "";
-          if(data.result == "bank")
-            route = "https://localhost:5002";
-          else if(data.result == "paypal")
-            route = "https://localhost:5003";
-          else if(data.result == "bitcoin")
-            route = "https://localhost:5001";
-          
+          let route = '';
+          if (data.result == 'bank') {
+            route = 'https://localhost:5002';
+          }
+          else if (data.result == 'paypal') {
+            route = 'https://localhost:5003';
+ }
+          else if (data.result == 'bitcoin') {
+            route = 'https://localhost:5001';
+ }
+
           console.log(route);
           window.location.replace(route);
         });
