@@ -21,4 +21,8 @@ export class KpService {
   postPaymentMethod(paymentMethod: string): Observable<any> {
     return this.httpClient.post('https://localhost:8443/sellerservice/paymentmethod', paymentMethod);
   }
+
+  getPayments(magazineId: string): Observable<any> {
+    return this.httpClient.get('https://localhost:8443/sellerservice/getpayments?magid=' + magazineId);
+  }
 }

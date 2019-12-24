@@ -6,6 +6,7 @@ import {FormsModule} from '@angular/forms';
 import {KpService} from '../services/kp.service';
 import { HttpClientModule } from '@angular/common/http';
 
+
 @NgModule({
   declarations: [
     AppComponent
@@ -13,7 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [KpService],
   bootstrap: [AppComponent]

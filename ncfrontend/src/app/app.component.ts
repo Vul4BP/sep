@@ -7,6 +7,7 @@ import {Magazine} from '../models/magazine';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+
 export class AppComponent {
   title = 'ncfrontend';
   magazines = new  Array<Magazine>();
@@ -23,7 +24,7 @@ export class AppComponent {
 
   onBuy(m) {
     this.ncServices.postMagazine(m).subscribe(data => {
-        window.location.replace('https://localhost:5000/');
+      window.location.replace('https://localhost:5000/magazine?id=' + m.id + '&price=' + m.price);
     });
   }
 }
