@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import {KpService} from '../services/kp.service';
-import {Payment} from "../models/payment";
-
+import {Payment} from '../models/payment';
 
 @Component({
   selector: 'app-root',

@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import {FormsModule} from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { KpService } from '../services/kp.service';
+import { NgxPayPalModule } from 'ngx-paypal';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { KpService } from '../services/kp.service';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxPayPalModule
   ],
   providers: [KpService],
   bootstrap: [AppComponent]
