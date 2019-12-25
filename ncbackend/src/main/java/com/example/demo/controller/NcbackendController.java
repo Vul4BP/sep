@@ -20,17 +20,17 @@ public class NcbackendController {
         Magazine m1 = new Magazine();
         m1.setName("Magazine1");
         m1.setPrice(9000);
-        m1.setId("ff8081816f3a0270016f3a1395cd0000");
+        m1.setId("ff8081816f3a3693016f3a3f3a950000");
 
         Magazine m2 = new Magazine();
         m2.setName("Magazine2");
         m2.setPrice(8000);
-        m2.setId("ff8081816f3a0270016f3a1486a20001");
+        m2.setId("ff8081816f3a3693016f3a3f82260001");
 
         Magazine m3 = new Magazine();
         m3.setName("Magazine3");
         m3.setPrice(7000);
-        m3.setId("ff8081816f3a0270016f3a14ab9c0002");
+        m3.setId("ff8081816f3a3693016f3a3fa81b0002");
 
         magazines.add(m1);
         magazines.add(m2);
