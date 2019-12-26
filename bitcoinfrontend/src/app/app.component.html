@@ -1,16 +1,22 @@
 <h1>Bitcoin frontend!!!</h1>
 
 <form #f="ngForm" (submit)="submitForm(f)" novalidate>
-  
-    <div>
-      <label class="custom-control-label" for="price">Price: </label> 
-      <input id="price" type="text" class="custom-control-input" value="price" name="price" ngModel required>
-    </div>
-  
-    <div *ngIf="isSubmitted && f.invalid">
-      <p>Please select either value</p>
-    </div>
-  
-  
-    <button type="submit" class="btn btn-danger btn-lg btn-block">Buy</button>
-  </form>
+  <div>
+    <label class="custom-control-label" for="email">Email: </label> 
+    <input id="email" type="text" class="custom-control-input" value="email" name="email" ngModel required>
+  </div>
+
+  <div>
+    <label class="custom-control-label" for="amount">Amount: </label> 
+    <input id="amount" type="text" class="custom-control-input" value="amount" name="amount" ngModel required>
+  </div>
+
+  <div *ngIf="isSubmitted && f.invalid">
+    <p>Please select either value</p>
+  </div>
+
+  <button type="submit" class="btn btn-danger btn-lg btn-block">Buy</button>
+</form>
+
+<label>Payment URL: </label>
+<a id='link' href='#'></a>

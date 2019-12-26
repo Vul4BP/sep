@@ -34,7 +34,6 @@ public class SellerController {
     @PostMapping("paymentmethod")
     public String checkPaymentMethod(@RequestBody String paymentMethod){
         JsonObject jsonObject = new JsonParser().parse(paymentMethod).getAsJsonObject();
-        //logika da se proveri da li je izabrani nacin placanja omogucen za dati casopis
         String json = "{ \"result\": " + jsonObject.get("payment").toString() + " }";
         return  json;
     }
@@ -45,7 +44,6 @@ public class SellerController {
         // @RequestParam means it is a parameter from the GET or POST request
 
         Magazine m = new Magazine();
-        //m.setId(UUID.randomUUID().toString());
         m.setPrice(price);
         m.setName(name);
         magazineRepository.save(m);
@@ -54,17 +52,11 @@ public class SellerController {
 
     @RequestMapping(path="/addmagazinepayment")
     public @ResponseBody String addNewMagazinePayment(@RequestParam String magid, @RequestParam String payid){
-        //UUID magId = UUID.fromString(magid);
         Optional<Magazine> m = magazineRepository.findById(magid);
-
-        //UUID payId = UUID.fromString(payid);
         Optional<Payment> p = paymentRepository.findById(payid);
 
         m.get().getPayments().add(p.get());
-        //p.get().getMagazines().add(m.get());
-
         magazineRepository.save(m.get());
-        //paymentRepository.save(p.get());
 
         return "saved";
     }
@@ -75,7 +67,6 @@ public class SellerController {
         // @RequestParam means it is a parameter from the GET or POST request
 
         Payment p = new Payment();
-        //p.setId(UUID.randomUUID().toString());
         p.setName(name);
         paymentRepository.save(p);
         return "Saved";

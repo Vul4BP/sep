@@ -40,7 +40,9 @@ public class NcbackendController {
     }
 
     @PostMapping("postmagazine")
-    public boolean postMagazine(@RequestBody Magazine magazine){
-        return true;
+    public String postMagazine(@RequestBody Magazine magazine)
+    {
+        return "{ \"redirectUrl\" : \"https://localhost:5000/magazine?id=" + magazine.getId() + "&price=" + magazine.getPrice() + "\" }";
+
     }
 }

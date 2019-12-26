@@ -10,8 +10,10 @@ import { NgForm } from '@angular/forms';
 export class AppComponent {
   title = 'paypalfrontend';
   isSubmitted = false;
+  paymentUrl: String = "";
 
   constructor(private kpService: KpService) {
+
   }
 
   submitForm(form: NgForm) {
@@ -19,9 +21,15 @@ export class AppComponent {
     if (!form.valid) {
       return false;
     } else {
-      this.kpService.startTransaction(form.value)  
+      let email = form.controls['email'].value;
+      let amount = form.controls['amount'].value;
+      let redirectUrl = "https://localhost:5004";
+      this.kpService.startTransaction(email, amount, redirectUrl)  
         .subscribe(data => {
           console.log(data);
+          this.paymentUrl = data['paymentUrl'];
+          document.getElementById('link').setAttribute('href',this.paymentUrl.toString());
+          document.getElementById('link').innerHTML = this.paymentUrl.toString();
         });
     }
   }

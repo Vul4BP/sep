@@ -24,7 +24,8 @@ export class AppComponent {
 
   onBuy(m) {
     this.ncServices.postMagazine(m).subscribe(data => {
-      window.location.replace('https://localhost:5000/magazine?id=' + m.id + '&price=' + m.price);
+      //window.location.replace('https://localhost:5000/magazine?id=' + m.id + '&price=' + m.price);
+      window.location.replace(data['redirectUrl']);
     });
   }
 }
