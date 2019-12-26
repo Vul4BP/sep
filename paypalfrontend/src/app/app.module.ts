@@ -7,9 +7,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { KpService } from '../services/kp.service';
 import { NgxPayPalModule } from 'ngx-paypal';
 
+
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+
+
   ],
   imports: [
     BrowserModule,

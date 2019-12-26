@@ -10,6 +10,8 @@ import { IPayPalConfig, ICreateOrderRequest } from 'ngx-paypal';
 })
 export class AppComponent implements OnInit {
 
+  constructor(private kpService: KpService) {}
+
   public payPalConfig?: IPayPalConfig;
   title = 'paypalfrontend';
   private showSuccess: boolean;
@@ -79,6 +81,5 @@ export class AppComponent implements OnInit {
     };
   }
 
-  constructor(private kpService: KpService) {
-  }
+
 }

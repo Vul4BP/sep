@@ -1,3 +1,6 @@
-<h1>*Paypal frontend*</h1>
 
-<ngx-paypal [config]="payPalConfig"></ngx-paypal>
+<!--<ngx-paypal [config]="payPalConfig"></ngx-paypal>-->
+
+<form method="post" action="https://localhost:8443/paypalservice/payment/pay" >
+  <button type="submit"> Process Payment </button>
+</form>
