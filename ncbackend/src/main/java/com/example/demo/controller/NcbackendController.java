@@ -29,7 +29,7 @@ public class NcbackendController {
 
         Magazine m3 = new Magazine();
         m3.setName("Magazine3");
-        m3.setPrice(7000);
+        m3.setPrice(100000);
         m3.setId("ff8081816f3a3693016f3a3fa81b0002");
 
         magazines.add(m1);
@@ -42,7 +42,7 @@ public class NcbackendController {
     @PostMapping("postmagazine")
     public String postMagazine(@RequestBody Magazine magazine)
     {
-        return "{ \"redirectUrl\" : \"https://localhost:5000/magazine?id=" + magazine.getId() + "&price=" + magazine.getPrice() + "\" }";
+        return "{ \"redirectUrl\" : \"https://localhost:5000/magazine?id=" + magazine.getId() + "\" }";
 
     }
 }

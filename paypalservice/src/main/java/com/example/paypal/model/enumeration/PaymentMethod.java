@@ -1,5 +1,5 @@
 package com.example.paypal.model.enumeration;
 
 public enum PaymentMethod {
-    CREDIT_CARD, PAYPAL
+    CREDIT_CARD, paypal
 }

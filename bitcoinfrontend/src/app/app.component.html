@@ -7,8 +7,8 @@
   </div>
 
   <div>
-    <label class="custom-control-label" for="amount">Amount: </label> 
-    <input id="amount" type="text" class="custom-control-input" value="amount" name="amount" ngModel required>
+    <label class="custom-control-label" for="amount">Amount: {{amountUsd}}</label> 
+    <!-- <input id="amount" type="text" class="custom-control-input" value='{{amountUsd}}' name="amount" ngModel readonly> -->
   </div>
 
   <div *ngIf="isSubmitted && f.invalid">

@@ -13,7 +13,6 @@ export class AppComponent {
   title = 'kpfrontend';
   isSubmitted = false;
   id = '';
-  price = '';
   urlString: string;
   url: URL;
   payments = new  Array<Payment>();
@@ -24,7 +23,6 @@ export class AppComponent {
     this.urlString = window.location.href;
     this.url = new URL(this.urlString);
     this.id = this.url.searchParams.get('id');
-    this.price = this.url.searchParams.get('price');
     console.log(this.id);
 
   }
@@ -40,19 +38,10 @@ export class AppComponent {
     if (!form.valid) {
       return false;
     } else {
-      this.kpService.postPaymentMethod(form.value)
+      this.kpService.postPaymentMethod(form.value, this.id)
         .subscribe(data => {
           console.log(data);
-          let route = '';
-          if (data.result == 'bank') {
-            route = 'https://localhost:5002';
-          } else if (data.result == 'paypal') {
-            route = 'https://localhost:5003';
-          } else if (data.result == 'bitcoin') {
-            route = 'https://localhost:5001';
-          }
-
-          console.log(route);
+          let route = data['redirectUrl']
           window.location.replace(route);
         });
     }

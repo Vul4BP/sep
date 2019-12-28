@@ -11,10 +11,24 @@ export class AppComponent {
   title = 'paypalfrontend';
   isSubmitted = false;
   paymentUrl: String = "";
+  id = '';
+  urlString: string;
+  url: URL;
+  amountUsd: string;
 
   constructor(private kpService: KpService) {
-
+    this.urlString = window.location.href;
+    this.url = new URL(this.urlString);
+    this.id = this.url.searchParams.get('id');
   }
+
+  ngOnInit() {
+    this.kpService.getPrice(this.id)
+      .subscribe(data => {
+        this.amountUsd = data['price'];
+    })
+  }
+
 
   submitForm(form: NgForm) {
     this.isSubmitted = true;
@@ -22,9 +36,9 @@ export class AppComponent {
       return false;
     } else {
       let email = form.controls['email'].value;
-      let amount = form.controls['amount'].value;
+      //let amount = form.controls['amount'].value;
       let redirectUrl = "https://localhost:5004";
-      this.kpService.startTransaction(email, amount, redirectUrl)  
+      this.kpService.startTransaction(email, this.amountUsd, redirectUrl)  
         .subscribe(data => {
           console.log(data);
           this.paymentUrl = data['paymentUrl'];

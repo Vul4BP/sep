@@ -11,11 +11,11 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @Builder
 @RequiredArgsConstructor
-public class PaymentRequest {
+public class PaymentRequest1 {
 
     private Double price;
     private String currency;
-    private String nameOfJournal;
+    private String magazineId;
     private PaymentIntent paymentIntent;
     private PaymentMethod paymentMethod;
     private String description;
@@ -36,12 +36,12 @@ public class PaymentRequest {
         this.currency = currency;
     }
 
-    public String getNameOfJournal() {
-        return nameOfJournal;
+    public String getMagazineId() {
+        return magazineId;
     }
 
-    public void setNameOfJournal(String nameOfJournal) {
-        this.nameOfJournal = nameOfJournal;
+    public void setMagazineId(String magazineId) {
+        this.magazineId = magazineId;
     }
 
     public PaymentIntent getPaymentIntent() {

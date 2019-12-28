@@ -15,7 +15,6 @@ export class AppComponent {
   constructor(private ncServices: NcService) {
   }
 
-  // tslint:disable-next-line:use-lifecycle-interface
   ngOnInit() {
     this.ncServices.getData().subscribe(data => {
       this.magazines = data;
@@ -24,7 +23,6 @@ export class AppComponent {
 
   onBuy(m) {
     this.ncServices.postMagazine(m).subscribe(data => {
-      //window.location.replace('https://localhost:5000/magazine?id=' + m.id + '&price=' + m.price);
       window.location.replace(data['redirectUrl']);
     });
   }

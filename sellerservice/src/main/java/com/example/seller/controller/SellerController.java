@@ -34,8 +34,19 @@ public class SellerController {
     @PostMapping("paymentmethod")
     public String checkPaymentMethod(@RequestBody String paymentMethod){
         JsonObject jsonObject = new JsonParser().parse(paymentMethod).getAsJsonObject();
-        String json = "{ \"result\": " + jsonObject.get("payment").toString() + " }";
-        return  json;
+        String payment = jsonObject.get("payment").getAsString();
+        String id = jsonObject.get("id").getAsString();
+        String magId = magazineRepository.findById(id).get().getId();
+        if(magId == null)
+            return "{ \"redirectUrl\" : \"https://localhost:5000\" }";
+        if(payment.equals("bitcoin"))
+            return "{ \"redirectUrl\" : \"https://localhost:5001/magazine?id=" + magId + "\" }";
+        else if(payment.equals("bank"))
+            return "{ \"redirectUrl\" : \"https://localhost:5002/magazine?id=" + magId + "\" }";
+        else if(payment.equals("paypal"))
+            return "{ \"redirectUrl\" : \"https://localhost:5003/magazine?id=" + magId + "\" }";
+
+        return "{ \"redirectUrl\" : \"https://localhost:5000\" }";
     }
 
     @RequestMapping(path="/addmagazine")
@@ -76,6 +87,12 @@ public class SellerController {
     public @ResponseBody Iterable<Magazine> getAllMagazines() {
         // This returns a JSON or XML with the users
         return magazineRepository.findAll();
+    }
+
+    @GetMapping(path="/getmagazine")
+    public @ResponseBody Magazine getMagazineById(@RequestParam String magid) {
+        // This returns a JSON or XML with the users
+        return magazineRepository.findById(magid).get();
     }
 
     @GetMapping(path="/allpayments")

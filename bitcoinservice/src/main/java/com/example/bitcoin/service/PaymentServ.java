@@ -33,7 +33,7 @@ public class PaymentServ implements PaymentService {
         paymentDto.setPaymentId(savedPayment.getId());
         paymentDto.setAmount(requestDto.getAmount());
         paymentDto.setApiToken(seller.getApiToken());
-        paymentDto.setCurrency("BTC");
+        paymentDto.setCurrency("USD");
         paymentDto.setTitle("Order");
         paymentDto.setSuccessUrl("https://localhost:8443/bitcoinservice/success/" + savedPayment.getId());
         paymentDto.setCancelUrl("https://localhost:8443/bitcoinservice/cancel/" + savedPayment.getId());
