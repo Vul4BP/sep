@@ -17,9 +17,7 @@ import java.util.Map;
 @CrossOrigin("*")
 public class PaymentController {
     private final Logger logger = LoggerFactory.getLogger(PaymentController.class);
-
     private final PaymentService paymentService;
-
     private final AccountService accountService;
 
     public PaymentController(PaymentServiceImpl paymentService, AccountServiceImpl accountService) {

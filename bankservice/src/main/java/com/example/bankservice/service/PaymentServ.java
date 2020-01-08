@@ -153,6 +153,6 @@ public class PaymentServ implements PaymentService {
         Payment payment = paymentRepository.findOneByUrl("banka/card/" + url);
         payment.setPaid(status);
         paymentRepository.save(payment);
-        return "https://localhost:5004/";
+        return "https://localhost:5004";
     }
 }

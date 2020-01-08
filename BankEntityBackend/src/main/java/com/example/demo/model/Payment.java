@@ -1,90 +1,30 @@
 package com.example.demo.model;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.ToString;
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
+@Data
 public class Payment {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "url", unique = false, nullable = false)
     private String url;
 
-    @Column(name = "amount", unique = false, nullable = true)
     private BigDecimal amount;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Account merchant;
-
-    @Column(name = "successUrl", unique = false, nullable = false)
     private String successUrl;
 
-    @Column(name = "failedUrl", unique = false, nullable = false)
     private String failedUrl;
 
-    @Column(name = "errorUrl", unique = false, nullable = false)
     private String errorUrl;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public Account getMerchant() {
-        return merchant;
-    }
-
-    public void setMerchant(Account merchant) {
-        this.merchant = merchant;
-    }
-
-    public String getSuccessUrl() {
-        return successUrl;
-    }
-
-    public void setSuccessUrl(String successUrl) {
-        this.successUrl = successUrl;
-    }
-
-    public String getFailedUrl() {
-        return failedUrl;
-    }
-
-    public void setFailedUrl(String failedUrl) {
-        this.failedUrl = failedUrl;
-    }
-
-    public String getErrorUrl() {
-        return errorUrl;
-    }
-
-    public void setErrorUrl(String errorUrl) {
-        this.errorUrl = errorUrl;
-    }
-
-    public Payment() {
-    }
+    @JsonIgnore
+    @ToString.Exclude
+    @ManyToOne()
+    private Account merchantAccount;
 }

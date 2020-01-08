@@ -10,31 +10,6 @@ import javax.persistence.Id;
 @Entity
 @Data
 public class Seller {
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getApiToken() {
-        return apiToken;
-    }
-
-    public void setApiToken(String apiToken) {
-        this.apiToken = apiToken;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -42,6 +17,8 @@ public class Seller {
     private String email;
 
     private String apiToken;
+
+    private String magazineId;
 
 }
 

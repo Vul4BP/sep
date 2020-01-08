@@ -20,11 +20,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
-    private static final String PAYMENT_URL_F = "%s/card/%s";
-
     private final Logger LOGGER = LoggerFactory.getLogger(PaymentServiceImpl.class);
+    private static final String PAYMENT_URL_F = "%s/card/%s";
     public static final String NOT_FOUND = "notFound";
-
 
     @Autowired
     private PaymentRepository paymentRepository;
@@ -51,7 +49,6 @@ public class PaymentServiceImpl implements PaymentService {
         Payment savedPayment = new Payment();
 
         ExternalBankPaymentResponse response = new ExternalBankPaymentResponse();
-
         Client client = clientService.findByMerchantId(kpRequestDto.getMerchantId());
 
         if (client == null) {
@@ -59,10 +56,10 @@ public class PaymentServiceImpl implements PaymentService {
         } else {
             payment.setUrl(generateTimeStamp());
             payment.setAmount(kpRequestDto.getAmount());
-            payment.setMerchant(client.getAccount());
             payment.setSuccessUrl(kpRequestDto.getSuccessUrl());
             payment.setFailedUrl(kpRequestDto.getFailedUrl());
             payment.setErrorUrl(kpRequestDto.getErrorUrl());
+            payment.setMerchantAccount(client.getAccount());
 
             savedPayment = paymentRepository.save(payment);
         }
@@ -85,7 +82,7 @@ public class PaymentServiceImpl implements PaymentService {
         String redirectUrl;
 
         Payment payment = paymentRepository.findByUrl(url);
-        System.out.println(payment.getAmount().toString() + payment.getMerchant() + payment.getUrl() + payment.getId() + payment.getSuccessUrl());
+        System.out.println(payment.getAmount().toString() + payment.getMerchantAccount() + payment.getUrl() + payment.getId() + payment.getSuccessUrl());
 
         if (payment == null) {
             transaction.setValid(false);
@@ -104,7 +101,7 @@ public class PaymentServiceImpl implements PaymentService {
         if (card == null) {
             transaction.setValid(false);
             transaction.setAmount(BigDecimal.valueOf(0));
-            transaction.setRecipient(payment.getMerchant());
+            transaction.setRecipient(payment.getMerchantAccount());
             transactionService.save(transaction);
 
             list.add(payment.getErrorUrl());
@@ -115,7 +112,7 @@ public class PaymentServiceImpl implements PaymentService {
         if (!card.getSecurityCode().toString().equals(cardDataDto.getSecurityCode().toString())) {
             transaction.setValid(false);
             transaction.setAmount(BigDecimal.valueOf(0));
-            transaction.setRecipient(payment.getMerchant());
+            transaction.setRecipient(payment.getMerchantAccount());
             transactionService.save(transaction);
 
             list.add(payment.getErrorUrl());
@@ -126,7 +123,7 @@ public class PaymentServiceImpl implements PaymentService {
         if(!card.getValidTo().toString().equals(cardDataDto.getValidTo().toString())) {
             transaction.setValid(false);
             transaction.setAmount(BigDecimal.valueOf(0));
-            transaction.setRecipient(payment.getMerchant());
+            transaction.setRecipient(payment.getMerchantAccount());
             transactionService.save(transaction);
 
             list.add(payment.getErrorUrl());
@@ -134,11 +131,11 @@ public class PaymentServiceImpl implements PaymentService {
             return list;
         }
 
-        transaction.setRecipient(payment.getMerchant());
+        transaction.setRecipient(payment.getMerchantAccount());
         transaction.setPayer(card.getAccount());
         transaction.setAmount(payment.getAmount());
 
-        Account merchant = payment.getMerchant();
+        Account merchant = payment.getMerchantAccount();
         Account account = card.getAccount();
 
         if (account.getAmount().compareTo(payment.getAmount()) < 0) {

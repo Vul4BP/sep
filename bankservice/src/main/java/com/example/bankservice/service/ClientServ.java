@@ -23,4 +23,9 @@ public class ClientServ implements ClientService {
     public Client findByMerchantId(String merchantId) {
         return clientRepository.findByMerchantId(merchantId);
     }
+
+    @Override
+    public Client findByMagazineId(String magazineId) {
+        return clientRepository.findByMagazineId(magazineId);
+    }
 }

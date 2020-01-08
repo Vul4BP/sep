@@ -1,11 +1,13 @@
 package com.example.bitcoin.service;
 
+import com.example.bitcoin.config.VarConfig;
 import com.example.bitcoin.model.Payment;
 import com.example.bitcoin.model.Seller;
 import com.example.bitcoin.modelDto.PaymentDto;
 import com.example.bitcoin.modelDto.RequestDto;
 import com.example.bitcoin.modelDto.ResponseDto;
 import com.example.bitcoin.repository.PaymentRepository;
+import org.aspectj.weaver.ast.Var;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -27,17 +29,16 @@ public class PaymentServ implements PaymentService {
         LOGGER.info("Preparing payment...");
 
         PaymentDto paymentDto = new PaymentDto();
-        Seller seller = sellerService.findByEmail(requestDto.getEmail());
+        Seller seller = sellerService.findByMagazineId(requestDto.getMagazineId());
         Payment savedPayment = paymentRepository.save(new Payment());
 
         paymentDto.setPaymentId(savedPayment.getId());
         paymentDto.setAmount(requestDto.getAmount());
         paymentDto.setApiToken(seller.getApiToken());
-        paymentDto.setCurrency("USD");
-        paymentDto.setTitle("Order");
-        paymentDto.setSuccessUrl("https://localhost:8443/bitcoinservice/success/" + savedPayment.getId());
-        paymentDto.setCancelUrl("https://localhost:8443/bitcoinservice/cancel/" + savedPayment.getId());
-        paymentDto.setRedirectUrl(requestDto.getRedirectUrl());
+        paymentDto.setCurrency(VarConfig.paymentCurrency);
+        paymentDto.setTitle(VarConfig.paymentTitle);
+        paymentDto.setSuccessUrl(VarConfig.paymentSuccessUrl + savedPayment.getId());
+        paymentDto.setCancelUrl(VarConfig.paymentCancelUrl + savedPayment.getId());
 
         LOGGER.info("Prepared payment info: " + paymentDto.toString());
         return paymentDto;
@@ -51,7 +52,6 @@ public class PaymentServ implements PaymentService {
         payment.setOrderId(responseDto.getId());
         payment.setSeller(seller);
         payment.setAmount(paymentDto.getAmount());
-        payment.setRedirectUrl(paymentDto.getRedirectUrl());
         payment.setStatus(responseDto.getStatus());
 
         LOGGER.info("Persisting payment: " + payment.toString());

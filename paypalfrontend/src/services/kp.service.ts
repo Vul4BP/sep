@@ -18,8 +18,8 @@ export class KpService {
 
   constructor(private httpClient: HttpClient) { }
 
-  postPaymentMethod(paymentMethod: string): Observable<any> {
-    return this.httpClient.post('https://localhost:8443/paypalservice/payment/pay', "elena");
+  postData(formdata: string): Observable<any> {
+    return this.httpClient.post('https://localhost:8443/paypalservice/api/paypal', formdata);
   }
 
   startTransaction(formData: string): Observable<any> {

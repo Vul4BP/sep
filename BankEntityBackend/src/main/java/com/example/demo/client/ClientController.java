@@ -15,9 +15,4 @@ public class ClientController {
     public ClientController(ClientService clientService) {
         this.clientService = clientService;
     }
-
-    @GetMapping
-    public List<Client> getAll() {
-        return clientService.findAll();
-    }
 }

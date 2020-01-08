@@ -1,68 +1,29 @@
 package com.example.demo.model;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.ToString;
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
+@Data
 public class Transaction {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "amount", unique = false, nullable = true)
     private BigDecimal amount;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Account payer;
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Account recipient;
-
-    @Column(name = "valid", unique = false, nullable = false)
     private Boolean valid;
 
-    public Long getId() {
-        return id;
-    }
+    @JsonIgnore
+    @ToString.Exclude
+    @ManyToOne()
+    private Account payer;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public Account getPayer() {
-        return payer;
-    }
-
-    public void setPayer(Account payer) {
-        this.payer = payer;
-    }
-
-    public Account getRecipient() {
-        return recipient;
-    }
-
-    public void setRecipient(Account recipient) {
-        this.recipient = recipient;
-    }
-
-    public Boolean getValid() {
-        return valid;
-    }
-
-    public void setValid(Boolean valid) {
-        this.valid = valid;
-    }
-
-    public Transaction() {
-    }
+    @JsonIgnore
+    @ToString.Exclude
+    @ManyToOne()
+    private Account recipient;
 }

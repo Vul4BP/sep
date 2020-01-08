@@ -1,22 +1,15 @@
-<h1>Bitcoin frontend!!!</h1>
+<div id="mainDiv" class="centerContent bg">
+  <h1 class="w-100 txt-center">BITCOIN PAYMENT</h1>
 
-<form #f="ngForm" (submit)="submitForm(f)" novalidate>
-  <div>
-    <label class="custom-control-label" for="email">Email: </label> 
-    <input id="email" type="text" class="custom-control-input" value="email" name="email" ngModel required>
-  </div>
+  <img class="img-style-loading" id="loadImg" src="../assets/imgs/load.gif" alt="Submit" width="65" height="65">
 
-  <div>
-    <label class="custom-control-label" for="amount">Amount: {{amountUsd}}</label> 
-    <!-- <input id="amount" type="text" class="custom-control-input" value='{{amountUsd}}' name="amount" ngModel readonly> -->
-  </div>
+  <p class="w-100 txt-center txt-25" id="magazineNameLbl"></p>
 
-  <div *ngIf="isSubmitted && f.invalid">
-    <p>Please select either value</p>
-  </div>
+  <p class="w-100 txt-center txt-20" id="magazineName"></p>
 
-  <button type="submit" class="btn btn-danger btn-lg btn-block">Buy</button>
-</form>
+  <p class="w-100 txt-center txt-25" id="magazinePriceLbl"></p>
 
-<label>Payment URL: </label>
-<a id='link' href='#'></a>
+  <p class="w-100 txt-center txt-20" id="magazinePrice"></p>
+
+  <input class="img-style" id="paymentImg" type="image" src="../assets/imgs/bitcoin.png" alt="Submit" width="170" height="65" (click)="goToPaymentUrl()">
+</div>

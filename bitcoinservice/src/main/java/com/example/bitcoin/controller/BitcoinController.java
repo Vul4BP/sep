@@ -1,5 +1,6 @@
 package com.example.bitcoin.controller;
 
+import com.example.bitcoin.config.VarConfig;
 import com.example.bitcoin.model.Payment;
 import com.example.bitcoin.modelDto.PaymentDto;
 import com.example.bitcoin.modelDto.RequestDto;
@@ -24,7 +25,7 @@ public class BitcoinController {
         this.paymentService = paymentService;
     }
 
-    @PostMapping("preparePayment")
+    @PostMapping("createPayment")
     public String postPreparePayment(RequestDto requestDto) {
         PaymentDto paymentDto = paymentService.preparePayment(requestDto);
         RestTemplate restTemplate = new RestTemplate();
@@ -63,13 +64,11 @@ public class BitcoinController {
 
         Payment payment = paymentService.getById(paymentId);
         LOGGER.info("Getting payment information..");
-
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Token " + payment.getSeller().getApiToken());
         HttpEntity<String> request = new HttpEntity<>("parameters", headers);
         ResponseEntity<ResponseDto> response = restTemplate.exchange("https://api-sandbox.coingate.com/v2/orders/" + payment.getOrderId(), HttpMethod.GET, request, ResponseDto.class);
-
         LOGGER.info("Basic payment info: " + Objects.requireNonNull(response.getBody()).toString());
         String status = response.getBody().getStatus();
         LOGGER.info("Changing payment status into: " + status);
@@ -77,8 +76,8 @@ public class BitcoinController {
         LOGGER.info("Persisting payment");
         Payment persistedPayment = paymentService.save(payment);
         LOGGER.info("Payment persisted: " + persistedPayment.toString());
-        String redirectUrl = payment.getRedirectUrl();
-        LOGGER.info("Redirecting to: " + redirectUrl);
+        String redirectUrl = VarConfig.paymentRedirectUrl;
+        LOGGER.info("Redirecting to: " + VarConfig.paymentRedirectUrl);
 
         return ResponseEntity.status(HttpStatus.FOUND).header("Location", redirectUrl).build();
     }

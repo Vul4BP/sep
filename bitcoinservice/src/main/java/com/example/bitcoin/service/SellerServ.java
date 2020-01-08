@@ -27,5 +27,10 @@ public class SellerServ implements SellerService {
     public Seller findByApiToken(String apiToken) {
         return sellerRepository.findByApiToken(apiToken);
     }
+
+    @Override
+    public Seller findByMagazineId(String magazineId) {
+        return sellerRepository.findByMagazineId(magazineId);
+    }
 }
 

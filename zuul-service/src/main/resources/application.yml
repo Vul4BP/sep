@@ -23,6 +23,15 @@ spring:
   application:
     name: zuul-server
 
+zuul:
+  host:
+    socket-timeout-millis: 300000
+
+
+ribbon:
+  ReadTimeout: 30000
+
+
 server:
   ssl:
     enabled: true

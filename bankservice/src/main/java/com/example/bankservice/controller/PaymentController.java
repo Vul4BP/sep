@@ -2,18 +2,14 @@ package com.example.bankservice.controller;
 
 import com.example.bankservice.Dto.CardDto;
 import com.example.bankservice.Dto.PaymentRequestDto;
-import com.example.bankservice.model.Payment;
-import com.example.bankservice.service.AccountServ;
-import com.example.bankservice.service.AccountService;
 import com.example.bankservice.service.PaymentServ;
 import com.example.bankservice.service.PaymentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.Objects;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/payment")
@@ -22,11 +18,9 @@ public class PaymentController {
     private final Logger LOGGER = LoggerFactory.getLogger(PaymentController.class);
 
     private final PaymentService paymentService;
-    private final AccountService accountService;
 
-    public PaymentController(PaymentServ paymentService, AccountServ accountService) {
+    public PaymentController(PaymentServ paymentService) {
         this.paymentService = paymentService;
-        this.accountService = accountService;
     }
 
     @PostMapping
@@ -45,6 +39,12 @@ public class PaymentController {
     public ResponseEntity<?> successPayment(@PathVariable String url) {
         LOGGER.info("Payment success");
         String redirect = paymentService.changeStatus(url,true);
+
+        //HttpHeaders responseHeaders = new HttpHeaders();
+        //responseHeaders.set("Access-Control-Allow-Origin", "*");
+        //responseHeaders.set("Location", redirect);
+        //return new ResponseEntity<String>("Hello World", responseHeaders, HttpStatus.FOUND);
+
         return ResponseEntity.status(HttpStatus.FOUND).header("Location", redirect).build();
     }
 

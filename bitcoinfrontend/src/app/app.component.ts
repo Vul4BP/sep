@@ -9,12 +9,13 @@ import { NgForm } from '@angular/forms';
 })
 export class AppComponent {
   title = 'paypalfrontend';
-  isSubmitted = false;
-  paymentUrl: String = "";
   id = '';
   urlString: string;
   url: URL;
   amountUsd: string;
+  magazineId: string;
+  magazineName: string;
+  paymentUrl = "";
 
   constructor(private kpService: KpService) {
     this.urlString = window.location.href;
@@ -23,28 +24,56 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    this.kpService.getPrice(this.id)
+    document.getElementById('magazineNameLbl').style.visibility = "hidden";
+    document.getElementById('magazineName').style.visibility = "hidden";
+    document.getElementById('magazinePriceLbl').style.visibility = "hidden";
+    document.getElementById('magazinePrice').style.visibility = "hidden";
+    document.getElementById('paymentImg').style.visibility = "hidden";
+
+    this.kpService.getMagazine(this.id)
       .subscribe(data => {
         this.amountUsd = data['price'];
+        this.magazineId = data['id'];
+        this.magazineName = data['name'];
+
+        if(this.magazineId != null && this.amountUsd != null){
+          this.getPaymentLink();
+        }
+
     })
   }
 
-
-  submitForm(form: NgForm) {
-    this.isSubmitted = true;
-    if (!form.valid) {
-      return false;
-    } else {
-      let email = form.controls['email'].value;
-      //let amount = form.controls['amount'].value;
-      let redirectUrl = "https://localhost:5004";
-      this.kpService.startTransaction(email, this.amountUsd, redirectUrl)  
+  getPaymentLink(){
+    this.kpService.startTransaction(this.magazineId, this.amountUsd)  
         .subscribe(data => {
           console.log(data);
           this.paymentUrl = data['paymentUrl'];
-          document.getElementById('link').setAttribute('href',this.paymentUrl.toString());
-          document.getElementById('link').innerHTML = this.paymentUrl.toString();
+
+          let loadImg = document.getElementById('loadImg');
+          loadImg.style.visibility = "hidden";
+          loadImg.remove();
+          
+          let payImg = document.getElementById('paymentImg');
+          let magName = document.getElementById('magazineName');
+          let magNameLbl = document.getElementById('magazineNameLbl');
+          let magPrice = document.getElementById('magazinePrice');
+          let magPriceLbl = document.getElementById('magazinePriceLbl');
+
+          magName.innerHTML = this.magazineName;
+          magPrice.innerHTML = this.amountUsd + " USD";
+          magNameLbl.innerHTML = "Magazine Name: ";
+          magPriceLbl.innerHTML = "Magazine Price: ";
+
+          payImg.style.visibility = "visible";
+          magNameLbl.style.visibility = "visible";
+          magName.style.visibility = "visible";
+          magPriceLbl.style.visibility = "visible";
+          magPrice.style.visibility = "visible";
+
         });
-    }
+  }
+
+  goToPaymentUrl(){
+    window.location.href = this.paymentUrl;
   }
 }

@@ -4,7 +4,6 @@ import com.example.demo.client.ClientService;
 import com.example.demo.model.Client;
 import com.example.demo.client.ClientRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -16,12 +15,6 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<Client> findAll() {
-        return clientRepository.findAll();
-    }
+    public Client findByMerchantId(String merchantId) { return clientRepository.findByMerchantId(merchantId); }
 
-    @Override
-    public Client findByMerchantId(String merchantId) {
-        return clientRepository.findByMerchantId(merchantId);
-    }
 }
