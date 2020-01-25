@@ -19,12 +19,7 @@ export class BankService {
     });
   }
 
-  changeStatus(url: String){
-    return this.http.get(`${url}`,{
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'responseType': 'text'
-      })
-    });
+  changeStatus(url: String) : Observable<any>{
+    return this.http.get(`${url}`);
   }
 }

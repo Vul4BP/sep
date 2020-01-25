@@ -30,7 +30,9 @@ export class FormabankeComponent implements OnInit {
         .subscribe(data => {
           console.log(data);
           let url = data['url'] + data['id'];
-          this.bankservice.changeStatus(url).subscribe(data => {});
+          this.bankservice.changeStatus(url).subscribe(data => {
+            console.log(data);
+          });
         });
     }
   }

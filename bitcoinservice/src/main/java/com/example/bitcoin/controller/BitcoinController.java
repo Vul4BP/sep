@@ -26,7 +26,7 @@ public class BitcoinController {
     }
 
     @PostMapping("createPayment")
-    public String postPreparePayment(RequestDto requestDto) {
+    public ResponseEntity<String> postPreparePayment(RequestDto requestDto) {
         PaymentDto paymentDto = paymentService.preparePayment(requestDto);
         RestTemplate restTemplate = new RestTemplate();
 
@@ -40,12 +40,16 @@ public class BitcoinController {
         bodyParams.add("success_url", paymentDto.getSuccessUrl());
         bodyParams.add("cancel_url", paymentDto.getCancelUrl());
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(bodyParams, headers);
-        ResponseEntity<ResponseDto> response = restTemplate.postForEntity("https://api-sandbox.coingate.com/v2/orders", request, ResponseDto.class);
+
+        ResponseEntity<ResponseDto> response = restTemplate.postForEntity(VarConfig.coingateUrl, request, ResponseDto.class);
+
         String paymentUrl = Objects.requireNonNull(response.getBody()).getPaymentUrl();
         LOGGER.info("Payment URL: " + paymentUrl);
+
         paymentService.persist(response.getBody(), paymentDto);
 
-        return "{ \"paymentUrl\" : \"" + paymentUrl + "\"} ";
+        String result = "{ \"paymentUrl\" : \"" + paymentUrl + "\"} ";
+        return new ResponseEntity<String>(result,HttpStatus.OK);
     }
 
     @GetMapping("/success/{paymentId}")
@@ -61,23 +65,22 @@ public class BitcoinController {
     }
 
     private ResponseEntity<?> getRedirectUrl(@PathVariable Long paymentId) {
-
         Payment payment = paymentService.getById(paymentId);
-        LOGGER.info("Getting payment information..");
+
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
+
         headers.add("Authorization", "Token " + payment.getSeller().getApiToken());
         HttpEntity<String> request = new HttpEntity<>("parameters", headers);
-        ResponseEntity<ResponseDto> response = restTemplate.exchange("https://api-sandbox.coingate.com/v2/orders/" + payment.getOrderId(), HttpMethod.GET, request, ResponseDto.class);
+        ResponseEntity<ResponseDto> response = restTemplate.exchange(VarConfig.coingateUrl + "/" + payment.getOrderId(), HttpMethod.GET, request, ResponseDto.class);
+
         LOGGER.info("Basic payment info: " + Objects.requireNonNull(response.getBody()).toString());
         String status = response.getBody().getStatus();
+
         LOGGER.info("Changing payment status into: " + status);
         payment.setStatus(status);
-        LOGGER.info("Persisting payment");
         Payment persistedPayment = paymentService.save(payment);
-        LOGGER.info("Payment persisted: " + persistedPayment.toString());
         String redirectUrl = VarConfig.paymentRedirectUrl;
-        LOGGER.info("Redirecting to: " + VarConfig.paymentRedirectUrl);
 
         return ResponseEntity.status(HttpStatus.FOUND).header("Location", redirectUrl).build();
     }

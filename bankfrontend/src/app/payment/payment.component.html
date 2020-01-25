@@ -1,0 +1,20 @@
+<form #f="ngForm" (submit)="submitForm(f)" novalidate>  
+    <div>
+      <label class="custom-control-label" for="magazineId">Magazine Id: </label>
+      <input id="magazineId" type="text" class="custom-control-input" value="magazineId" name="magazineId" ngModel required>
+    </div>
+
+    <div>
+      <label class="custom-control-label" for="amount">Amount: {{amountUsd}} </label>
+      <input id="amount" type="text" class="custom-control-input" value="amount" name="amount" ngModel required>
+    </div>
+  
+    <div *ngIf="isSubmitted && f.invalid">
+      <p>Please select either value</p>
+    </div>
+
+    <button type="submit" class="btn btn-danger btn-lg btn-block">Buy</button>
+  </form>
+
+  <label>Payment Url: </label>
+  <a id="link" href="#"></a>

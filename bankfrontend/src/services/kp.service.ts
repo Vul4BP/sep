@@ -27,10 +27,14 @@ export class KpService {
   }*/
 
   startTransaction(formdata: String): Observable<any> {
-    return this.httpClient.post('https://localhost:8443/bankservice/payment',formdata);
+    return this.httpClient.post('https://localhost:8443/bankservice',formdata);
   }
 
   getPrice(magId: string): Observable<any>{
     return this.httpClient.get('https://localhost:8443/sellerservice/getmagazine?magid=' + magId);
+  }
+
+  addSeller(seller: Object): Observable<any>{
+    return this.httpClient.post('https://localhost:8443/bankservice/seller/add', seller); 
   }
 }

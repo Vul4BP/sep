@@ -38,11 +38,16 @@ export class AppComponent {
     if (!form.valid) {
       return false;
     } else {
-      this.kpService.postPaymentMethod(form.value, this.id)
+
+      let payment = form.value['payment'];
+      let obj = {};
+      obj['payment'] = payment;
+      obj['id'] = this.id;
+      console.log(obj);
+      this.kpService.postPaymentMethod(obj)
         .subscribe(data => {
           console.log(data);
-          let route = data['redirectUrl']
-          window.location.replace(route);
+          window.location.replace(data['redirectUrl']);
         });
     }
   }

@@ -1,6 +1,7 @@
 package com.example.bankservice.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
 import java.math.BigDecimal;
 import lombok.Data;
 
@@ -8,18 +9,16 @@ import lombok.Data;
 @Data
 public class Payment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "amount", unique = false, nullable = true)
-    private BigDecimal amount;
-
-    @Column(name = "url", unique = false, nullable = false)
     private String url;
 
-    @Column(name = "magazineId", unique = false, nullable = false)
-    private String magazineId;
+    private String status;
 
-    @Column(name = "paid", unique = false, nullable = false)
-    private Boolean paid;
+    @Digits(integer = 10, fraction = 2)
+    private BigDecimal amount;
+
+    @ManyToOne
+    private Seller seller;
 }

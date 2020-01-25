@@ -19,12 +19,14 @@ export class KpService {
   constructor(private httpClient: HttpClient) { }
 
   postData(formdata: string): Observable<any> {
-    return this.httpClient.post('https://localhost:8443/paypalservice/api/paypal', formdata);
+    return this.httpClient.post('https://localhost:8443/paypalservice/createPayment', formdata);
   }
 
-  startTransaction(formData: string): Observable<any> {
-    return this.httpClient.get('https://localhost:8443/paypalservice/getjson');
+  addSeller(seller: Object): Observable<any>{
+    return this.httpClient.post('https://localhost:8443/paypalservice/seller/add', seller); 
+  }
 
-
+  getMagazine(id : Object): Observable<any>{
+    return this.httpClient.get(`https://localhost:8443/sellerservice/magazine/get/${id}`);
   }
 }

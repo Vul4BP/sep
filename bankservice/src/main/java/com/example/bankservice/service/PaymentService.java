@@ -11,5 +11,5 @@ public interface PaymentService {
     List<Payment> findAll();
     String useCardData(CardDto cardDto, String url);
     String handleRequest(PaymentRequestDto RequestDto);
-    String changeStatus(String url, boolean status);
+    String changeStatus(String url, String status);
 }

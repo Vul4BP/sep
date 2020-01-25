@@ -9,5 +9,7 @@ import java.util.UUID;
 // CRUD refers Create, Read, Update, Delete
 
 public interface MagazineRepository extends CrudRepository<Magazine, String> {
-
+    Magazine findByNaziv(String naziv);
+    Magazine findByIssn(String issn);
+    Magazine findByCasopisId(Long id);
 }

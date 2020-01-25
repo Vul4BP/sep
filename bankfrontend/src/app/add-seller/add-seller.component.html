@@ -1,0 +1,10 @@
+<div> 
+    <form #f="ngForm" (ngSubmit)="onSubmit(f.value, f)" ngNativeValidate>
+      <table>
+          <tr><td><label>Email: </label></td><td><input type="text" name="email" ngModel></td></tr>
+          <tr><td><label>Merchant Id: </label></td><td><input type="text" name="merchantId" ngModel></td></tr>
+          <tr><td colspan="2"><input type="submit"></td></tr>
+      </table>
+    </form>
+  </div>
+  

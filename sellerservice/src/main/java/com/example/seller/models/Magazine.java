@@ -1,57 +1,34 @@
 package com.example.seller.models;
 
-import org.hibernate.annotations.GenericGenerator;
+import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Set;
-import java.util.UUID;
+import java.util.List;
 
-@Entity // This tells Hibernate to make a table out of this class
+@Entity
+@Data
 public class Magazine {
-    @Id @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name="system-uuid", strategy = "uuid")
-    private String id;
 
-    private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-    public String getId() {
-        return id;
-    }
+    @Column(name="naziv", nullable = false, unique = true)
+    private String naziv;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    @Column(name="issn", nullable =  false, unique = true)
+    private String issn;
 
-    public String getName() {
-        return name;
-    }
+    @Column(name="clanarina", nullable = false)
+    private Long clanarina;
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public Set<Payment> getPayments() {
-        return payments;
-    }
-
-    public void setPayments(Set<Payment> payments) {
-        this.payments = payments;
-    }
-
-    private double price;
+    @Column(name="casopis_id")
+    private Long casopisId;
 
     @ManyToMany
     @JoinTable(
-            name = "payment_methods",
+            name = "magazine_nacinplacanja",
             joinColumns = @JoinColumn(name = "magazine_id"),
-            inverseJoinColumns = @JoinColumn(name = "payment_id"))
-    Set<Payment> payments;
+            inverseJoinColumns = @JoinColumn(name = "placanje_id"))
+    private List<NacinPlacanja> naciniPlacanja;
 }

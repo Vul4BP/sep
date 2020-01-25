@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 
 @Data
 public class RequestDto {
-    private String magazineId;
-
+    private Long magazineId;
     private BigDecimal amount;
 }

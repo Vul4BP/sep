@@ -6,8 +6,8 @@ import com.example.bitcoin.model.Seller;
 import com.example.bitcoin.modelDto.PaymentDto;
 import com.example.bitcoin.modelDto.RequestDto;
 import com.example.bitcoin.modelDto.ResponseDto;
+import com.example.bitcoin.modelDto.SellerDto;
 import com.example.bitcoin.repository.PaymentRepository;
-import org.aspectj.weaver.ast.Var;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class PaymentServ implements PaymentService {
         LOGGER.info("Preparing payment...");
 
         PaymentDto paymentDto = new PaymentDto();
-        Seller seller = sellerService.findByMagazineId(requestDto.getMagazineId());
+        SellerDto seller = sellerService.findByMagazineId(requestDto.getMagazineId());
         Payment savedPayment = paymentRepository.save(new Payment());
 
         paymentDto.setPaymentId(savedPayment.getId());

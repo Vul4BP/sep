@@ -22,7 +22,11 @@ export class KpService {
     return this.httpClient.post('https://localhost:8443/bitcoinservice/createPayment',"magazineId=" + magazineId + "&amount=" + amount, {headers: new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded')});
   }
 
-  getMagazine(magId: string): Observable<any>{
-    return this.httpClient.get('https://localhost:8443/sellerservice/getmagazine?magid=' + magId);
+  getMagazine(id : Object): Observable<any>{
+    return this.httpClient.get(`https://localhost:8443/sellerservice/magazine/get/${id}`);
+  }
+
+  addSeller(seller: Object): Observable<any>{
+    return this.httpClient.post('https://localhost:8443/bitcoinservice/seller/add', seller); 
   }
 }

@@ -6,7 +6,7 @@
 
 #gnome-terminal --working-directory=/home/$1/Desktop/sep/BankEntityBackend --command="mvn spring-boot:run"
 
-gnome-terminal --working-directory=/home/$1/Desktop/sep/BankEntityFrontend/Banka --command="npm start"
+#gnome-terminal --working-directory=/home/$1/Desktop/sep/BankEntityFrontend/Banka --command="npm start"
 
 #-------------------------PODIZANJE-KP-BACKENDA-----------------------
 
@@ -28,7 +28,7 @@ gnome-terminal --working-directory=/home/$1/Desktop/sep/sellerservice --command=
 sleep 10;
 #-------------------------PODIZANJE-NC-FRONTA-----------------------
 
-gnome-terminal --working-directory=/home/$1/Desktop/sep/ncfrontend --command="npm start"
+#gnome-terminal --working-directory=/home/$1/Desktop/sep/ncfrontend --command="npm start"
 
 #-------------------------PODIZANJE-KP-FRONTOVA-----------------------
 

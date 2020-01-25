@@ -2,12 +2,13 @@ package com.example.bankservice.service;
 
 import com.example.bankservice.Dto.CardDto;
 import com.example.bankservice.Dto.PaymentRequestDto;
-import com.example.bankservice.Dto.PaymentResponseDto;
+import com.example.bankservice.Dto.SellerDto;
 import com.example.bankservice.Dto.SendDataDto;
-import com.example.bankservice.model.Client;
+import com.example.bankservice.config.VarConfig;
 import com.example.bankservice.model.Payment;
-import com.example.bankservice.repository.ClientRepository;
+import com.example.bankservice.model.Seller;
 import com.example.bankservice.repository.PaymentRepository;
+import com.example.bankservice.repository.SellerRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +33,10 @@ public class PaymentServ implements PaymentService {
     private PaymentRepository paymentRepository;
 
     @Autowired
-    private ClientService clientService;
+    private SellerService sellerService;
 
     @Autowired
-    private ClientRepository clientRepository;
+    private SellerRepository sellerRepository;
 
     @Override
     public List<Payment> findAll() {
@@ -46,23 +47,22 @@ public class PaymentServ implements PaymentService {
     public String handleRequest(PaymentRequestDto requestDto) {
 
         Payment payment = new Payment();
-        Payment savedPayment;
-
         RestTemplate restTemplate = new RestTemplate();
-        String fooResourceUrl = "http://localhost:8091/payment";
-
         ObjectMapper mapper = new ObjectMapper();
-        SendDataDto sd = new SendDataDto();
-        sd.setAmount(requestDto.getAmount());
-        sd.setErrorUrl("https://localhost:8443/bankservice/payment/error/");
-        sd.setFailedUrl("https://localhost:8443/bankservice/payment/failed/");
-        sd.setSuccessUrl("https://localhost:8443/bankservice/payment/success/");
-        Client cl = clientRepository.findByMagazineId(requestDto.getMagazineId());
-        sd.setMerchantId(cl.getMerchantId());
+
+        SendDataDto sendDto = new SendDataDto();
+        sendDto.setAmount(requestDto.getAmount());
+        sendDto.setErrorUrl(VarConfig.paymentErrorUrl);
+        sendDto.setFailedUrl(VarConfig.paymentCancelUrl);
+        sendDto.setSuccessUrl(VarConfig.paymentSuccessUrl);
+
+        Long magId = Long.parseLong(requestDto.getMagazineId());
+        SellerDto sellerDto = sellerService.findByMagazineId(magId);
+        sendDto.setMerchantId(sellerDto.getMerchantId());
 
         String body = "";
         try {
-            body = mapper.writeValueAsString(sd);
+            body = mapper.writeValueAsString(sendDto);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -70,25 +70,26 @@ public class PaymentServ implements PaymentService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<String>(body, headers);
-        ResponseEntity<String> response = restTemplate.postForEntity(fooResourceUrl, entity, String.class);
+        ResponseEntity<String> response = restTemplate.postForEntity(VarConfig.bankPaymentUrl, entity, String.class);
 
         JSONObject actualObj = null;
-        String ret = "";
+        String urlStr = "";
 
         try {
             actualObj = new JSONObject(response.getBody());
-            ret = actualObj.getString("url");
-            payment.setUrl(ret);
+            urlStr = actualObj.getString("url");
+            payment.setUrl(urlStr);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        payment.setMagazineId(requestDto.getMagazineId());
         payment.setAmount(requestDto.getAmount());
-        payment.setPaid(false);
 
-        savedPayment = paymentRepository.save(payment);
-        return "http://localhost:5010/" + ret;
+        Seller seller = sellerRepository.findByMerchantId(sellerDto.getMerchantId());
+        payment.setSeller(seller);
+
+        paymentRepository.save(payment);
+        return VarConfig.bankFrontend + urlStr;
 
     }
 
@@ -96,7 +97,7 @@ public class PaymentServ implements PaymentService {
     public String useCardData(CardDto cardDto, String url) {
 
         RestTemplate restTemplate = new RestTemplate();
-        String fooResourceUrl = "http://localhost:8091/payment/" + url;
+        String fooResourceUrl = VarConfig.bankPaymentUrl + url;
 
         ObjectMapper mapper = new ObjectMapper();
         CardDto cd = new CardDto();
@@ -122,14 +123,13 @@ public class PaymentServ implements PaymentService {
         System.out.println(response.getBody());
 
         JSONObject actualObj = null;
-        String ret = "";
-        String ret1 = "";
-
+        String urlStr = "";
+        String placenoStr = "";
 
         try {
             actualObj = new JSONObject(response.getBody());
-            ret = actualObj.getString("url");
-            ret1 = actualObj.getString("placeno");
+            urlStr = actualObj.getString("url");
+            placenoStr = actualObj.getString("placeno");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -137,22 +137,22 @@ public class PaymentServ implements PaymentService {
         Payment payment = paymentRepository.findOneByUrl("banka/card/" + url);
         Payment savedPayment = new Payment();
 
-        if (ret1.equals("true")) {
-            payment.setPaid(true);
+        if (placenoStr.equals("true")) {
+            payment.setStatus("Success");
         } else {
-            payment.setPaid(false);
+            payment.setStatus("Canceled");
         }
 
         savedPayment = paymentRepository.save(payment);
 
-        return ret;
+        return urlStr;
     }
 
     @Override
-    public String changeStatus(String url,boolean status) {
+    public String changeStatus(String url, String status) {
         Payment payment = paymentRepository.findOneByUrl("banka/card/" + url);
-        payment.setPaid(status);
+        payment.setStatus(status);
         paymentRepository.save(payment);
-        return "https://localhost:5004";
+        return VarConfig.paymentRedirectUrl;
     }
 }

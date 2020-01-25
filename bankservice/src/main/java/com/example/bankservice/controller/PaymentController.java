@@ -9,11 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-
 @RestController
-@RequestMapping("/payment")
-@CrossOrigin("*")
 public class PaymentController {
     private final Logger LOGGER = LoggerFactory.getLogger(PaymentController.class);
 
@@ -38,27 +34,24 @@ public class PaymentController {
     @GetMapping("/success/{url}")
     public ResponseEntity<?> successPayment(@PathVariable String url) {
         LOGGER.info("Payment success");
-        String redirect = paymentService.changeStatus(url,true);
-
-        //HttpHeaders responseHeaders = new HttpHeaders();
-        //responseHeaders.set("Access-Control-Allow-Origin", "*");
-        //responseHeaders.set("Location", redirect);
-        //return new ResponseEntity<String>("Hello World", responseHeaders, HttpStatus.FOUND);
-
+        String redirect = paymentService.changeStatus(url,"Success");
         return ResponseEntity.status(HttpStatus.FOUND).header("Location", redirect).build();
+        //String body = "{ \"res\" : \"Ok\" }";
+        //return new ResponseEntity<>(body, HttpStatus.OK);
+
     }
 
     @GetMapping("/error/{url}")
     public ResponseEntity<?> errorPayment(@PathVariable String url) {
         LOGGER.info("Payment error");
-        String redirect = paymentService.changeStatus(url,false);
+        String redirect = paymentService.changeStatus(url,"Error");
         return ResponseEntity.status(HttpStatus.FOUND).header("Location", redirect).build();
     }
 
     @GetMapping("/failed/{url}")
     public ResponseEntity<?> failedPayment(@PathVariable String url) {
         LOGGER.info("Payment failed");
-        String redirect = paymentService.changeStatus(url,false);
+        String redirect = paymentService.changeStatus(url,"Canceled");
         return ResponseEntity.status(HttpStatus.FOUND).header("Location", redirect).build();
     }
 
