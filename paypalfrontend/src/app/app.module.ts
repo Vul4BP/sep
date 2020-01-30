@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AddSellerComponent } from './add-seller/add-seller.component';
 import { RouterModule } from '@angular/router';
 import { PaymentComponent } from './payment/payment.component';
+import { SubscriptionComponent } from './subscription/subscription.component';
 
 const Routes = [
   {
@@ -16,6 +17,10 @@ const Routes = [
   {
     path: "seller/:id",
     component: AddSellerComponent,
+  },
+  {
+    path: "subscription/:id",
+    component: SubscriptionComponent,
   }
 ]
 
@@ -23,7 +28,8 @@ const Routes = [
   declarations: [
     AppComponent,
     PaymentComponent,
-    AddSellerComponent
+    AddSellerComponent,
+    SubscriptionComponent
   ],
   imports: [
     BrowserModule,

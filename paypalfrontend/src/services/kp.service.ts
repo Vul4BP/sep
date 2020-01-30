@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {CreatePlanRequest} from "../app/models/CreatePlanRequest";
 
 // @ts-ignore
 @Injectable({
@@ -23,7 +24,7 @@ export class KpService {
   }
 
   addSeller(seller: Object): Observable<any>{
-    return this.httpClient.post('https://localhost:8443/paypalservice/seller/add', seller); 
+    return this.httpClient.post('https://localhost:8443/paypalservice/seller/add', seller);
   }
 
   getSeller(id : String): Observable<any>{
@@ -32,5 +33,13 @@ export class KpService {
 
   getItem(id : String): Observable<any>{
     return this.httpClient.get(`https://localhost:8443/sellerservice/item/get/${id}`);
+  }
+
+  createAndActivatePlan(request: CreatePlanRequest): Observable<any> {
+    return this.httpClient.post('https://localhost:8443/paypalservice/subscription/plan/createAndActivePlan', request);
+  }
+
+  subscribeToPlan(obj: object): Observable<any> {
+    return this.httpClient.post('https://localhost:8443/paypalservice/subscription/plan/subscribe/' , obj);
   }
 }
