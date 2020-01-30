@@ -3,7 +3,10 @@ import { Routes, RouterModule } from '@angular/router';
 import { FormabankeComponent } from './formabanke/formabanke.component';
 
 const routes: Routes = [
-  { path: 'banka/card/:transaction', component: FormabankeComponent }
+  { 
+    path: 'banka/card/:transaction',
+    component: FormabankeComponent
+  }
 ];
 
 @NgModule({

@@ -1,7 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { KpService } from 'src/services/kp.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { stringify } from 'querystring';
 
 declare var paypal;
 
@@ -14,21 +13,22 @@ declare var paypal;
 export class PaymentComponent implements OnInit {
   @ViewChild('paypal', { static: true }) paypalElement: ElementRef;
 
-  private magazineId = "";
+  private itemId = "";
 
   constructor(private kpService: KpService, private route: ActivatedRoute, private router: Router) {
     this.route.params.subscribe(params => {
-      this.magazineId = params['id'];
+      this.itemId = params['id'];
     });
   }
 
   ngOnInit() {
-    this.kpService.getMagazine(this.magazineId)
+    this.kpService.getItem(this.itemId)
       .subscribe(
         resp => {
           console.log(resp);
-          var clanarina = resp['clanarina'];
-          var casopisId = resp['casopisId'];
+          var price = resp['amount'];
+          var email = resp['seller']['email'];
+          
           var returnUrl = "https://localhost:5004";
           paypal.Button.render({
             env: 'sandbox',
@@ -39,8 +39,8 @@ export class PaymentComponent implements OnInit {
               return fetch('https://localhost:8443/paypalservice/createPayment',{
                 method:'post',
                 body:JSON.stringify({
-                  magazineId: casopisId,
-                  amount: clanarina
+                  email: email,
+                  amount: price
                 }),
                 headers:{
                   'Accept': 'application/json',

@@ -29,7 +29,7 @@ public class PaymentServ implements PaymentService {
         LOGGER.info("Preparing payment...");
 
         PaymentDto paymentDto = new PaymentDto();
-        SellerDto seller = sellerService.findByMagazineId(requestDto.getMagazineId());
+        SellerDto seller = sellerService.findByEmail(requestDto.getEmail());
         Payment savedPayment = paymentRepository.save(new Payment());
 
         paymentDto.setPaymentId(savedPayment.getId());

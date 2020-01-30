@@ -4,6 +4,6 @@ import com.example.paypal.dto.SellerDto;
 import com.example.paypal.model.Seller;
 
 public interface ISellerService {
-    SellerDto findByMagazineId(Long magazineId);
+    SellerDto findByEmail(String email);
     SellerDto addSeller(SellerDto sellerDto);
 }

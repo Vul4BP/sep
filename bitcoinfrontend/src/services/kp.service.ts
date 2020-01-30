@@ -18,12 +18,16 @@ export class KpService {
 
   constructor(private httpClient: HttpClient) { }
 
-  startTransaction(magazineId: string, amount: string): Observable<any> {
-    return this.httpClient.post('https://localhost:8443/bitcoinservice/createPayment',"magazineId=" + magazineId + "&amount=" + amount, {headers: new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded')});
+  startTransaction(email: string, amount: string): Observable<any> {
+    return this.httpClient.post('https://localhost:8443/bitcoinservice/createPayment',"email=" + email + "&amount=" + amount, {headers: new HttpHeaders().set('Content-Type','application/x-www-form-urlencoded')});
   }
 
-  getMagazine(id : Object): Observable<any>{
-    return this.httpClient.get(`https://localhost:8443/sellerservice/magazine/get/${id}`);
+  getSeller(id : Object): Observable<any>{
+    return this.httpClient.get(`https://localhost:8443/sellerservice/seller/get/${id}`);
+  }
+
+  getItem(id : String): Observable<any>{
+    return this.httpClient.get(`https://localhost:8443/sellerservice/item/get/${id}`);
   }
 
   addSeller(seller: Object): Observable<any>{

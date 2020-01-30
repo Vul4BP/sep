@@ -14,28 +14,24 @@ public class SellerService implements ISellerService {
     }
 
     @Override
-    public SellerDto findByMagazineId(Long magazineId) {
-        Seller seller = sellerRepository.findByMagazineId(magazineId);
+    public SellerDto findByEmail(String email) {
+        Seller seller = sellerRepository.findByEmail(email);
         if(seller == null){
             return null;
         }
 
         SellerDto sellerDto = new SellerDto();
         sellerDto.setId(seller.getId());
-        sellerDto.setMagazineId(seller.getMagazineId());
-        sellerDto.setClientId(seller.getClientId());
-        sellerDto.setSecret(seller.getSecret());
         sellerDto.setEmail(seller.getEmail());
+        sellerDto.setPaypalEmail(seller.getPaypalEmail());
         return sellerDto;
     }
 
     @Override
     public SellerDto addSeller(SellerDto sellerDto) {
         Seller seller = new Seller();
-        seller.setClientId(sellerDto.getClientId());
-        seller.setSecret(sellerDto.getSecret());
         seller.setEmail(sellerDto.getEmail());
-        seller.setMagazineId(sellerDto.getMagazineId());
+        seller.setPaypalEmail(sellerDto.getPaypalEmail());
 
         try {
             sellerRepository.save(seller);

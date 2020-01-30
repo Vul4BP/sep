@@ -36,12 +36,12 @@ public class PaymentService implements IPaymentService{
     @Override
     public CreatePaymentResponseDto createPayment(CreatePaymentRequestDto request) {
 
-        Seller seller = sellerRepository.findByMagazineId(request.getMagazineId());
+        Seller seller = sellerRepository.findByEmail(request.getEmail());
 
         MyPayment myPayment = new MyPayment();
         myPayment = paymentRepository.save(myPayment);
 
-        Transaction transaction = MyPaymentUtils.setTransaction(request.getAmount(), seller.getEmail());
+        Transaction transaction = MyPaymentUtils.setTransaction(request.getAmount(), seller.getPaypalEmail());  //paypal email
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
 
@@ -51,7 +51,7 @@ public class PaymentService implements IPaymentService{
         payment.setTransactions(transactions);
         payment.setRedirectUrls(MyPaymentUtils.setRedirectUrls(myPayment.getId()));
 
-        APIContext apiContext = new APIContext(seller.getClientId(), seller.getSecret(), VarConfig.mode);
+        APIContext apiContext = new APIContext(VarConfig.clinetId, VarConfig.secret, VarConfig.mode);
 
         Payment createdPayment = null;
         PaypalResponseDto responseDto = new PaypalResponseDto();
@@ -90,7 +90,7 @@ public class PaymentService implements IPaymentService{
         //Long id = Long.parseLong(paymentId);
         MyPayment myPayment = paymentRepository.findByPaymentId(paymentId);
         Seller seller = myPayment.getSeller();
-        APIContext apiContext = new APIContext(seller.getClientId(), seller.getSecret(), VarConfig.mode);
+        APIContext apiContext = new APIContext(VarConfig.clinetId, VarConfig.secret, VarConfig.mode);
 
         Payment payment = new Payment();
         payment.setId(paymentId);

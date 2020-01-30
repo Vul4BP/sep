@@ -19,10 +19,10 @@ export class KpService {
   constructor(private httpClient: HttpClient) { }
 
   postPaymentMethod(data: Object): Observable<any> {
-    return this.httpClient.post('https://localhost:8443/sellerservice/magazine/paymentmethod', data);
+    return this.httpClient.post('https://localhost:8443/sellerservice/item/paymentmethod', data);
   }
 
   getPayments(magazineId: string): Observable<any> {
-    return this.httpClient.get('https://localhost:8443/sellerservice/magazine/getpayments/' + magazineId);
+    return this.httpClient.get('https://localhost:8443/sellerservice/item/getpayments/' + magazineId);
   }
 }

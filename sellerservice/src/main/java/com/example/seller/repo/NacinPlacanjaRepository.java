@@ -4,5 +4,5 @@ import com.example.seller.models.NacinPlacanja;
 import org.springframework.data.repository.CrudRepository;
 
 public interface NacinPlacanjaRepository extends CrudRepository<NacinPlacanja, String> {
-
+    NacinPlacanja findByName(String name);
 }

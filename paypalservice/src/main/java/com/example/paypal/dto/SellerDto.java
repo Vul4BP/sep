@@ -6,7 +6,5 @@ import lombok.Data;
 public class SellerDto {
     private Long id;
     private String email;
-    private String clientId;
-    private String secret;
-    private Long magazineId;
+    private String paypalEmail;
 }

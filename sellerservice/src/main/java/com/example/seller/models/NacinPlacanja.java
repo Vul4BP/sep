@@ -13,4 +13,8 @@ public class NacinPlacanja {
 
     @Column(name="name", nullable = false, unique = true)
     String name;
+
+    @Column(name="url", nullable = false, unique = true)
+    String url;
+
 }

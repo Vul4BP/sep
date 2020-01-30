@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PaymentService {
     List<Payment> findAll();
-    String useCardData(CardDto cardDto, String url);
+    //String useCardData(CardDto cardDto, String url);
     String handleRequest(PaymentRequestDto RequestDto);
     String changeStatus(String url, String status);
 }

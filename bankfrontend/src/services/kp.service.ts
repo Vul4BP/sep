@@ -18,23 +18,19 @@ export class KpService {
 
   constructor(private httpClient: HttpClient) { }
 
-  /*
-  startTransaction(id: string, amountUsd: string): Observable<any> {
-    let obj = {};
-    obj['amount'] = amountUsd;
-    obj['magazineId'] = id; 
-    return this.httpClient.post('https://localhost:8443/bankservice/payment',obj);
-  }*/
-
-  startTransaction(formdata: String): Observable<any> {
+  startTransaction(formdata: Object): Observable<any> {
     return this.httpClient.post('https://localhost:8443/bankservice',formdata);
-  }
-
-  getPrice(magId: string): Observable<any>{
-    return this.httpClient.get('https://localhost:8443/sellerservice/getmagazine?magid=' + magId);
   }
 
   addSeller(seller: Object): Observable<any>{
     return this.httpClient.post('https://localhost:8443/bankservice/seller/add', seller); 
+  }
+
+  getSeller(id : Object): Observable<any>{
+    return this.httpClient.get(`https://localhost:8443/sellerservice/seller/get/${id}`);
+  }
+
+  getItem(id : String): Observable<any>{
+    return this.httpClient.get(`https://localhost:8443/sellerservice/item/get/${id}`);
   }
 }

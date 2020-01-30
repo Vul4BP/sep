@@ -9,26 +9,35 @@ import { KpService } from 'src/services/kp.service';
 })
 export class AddSellerComponent implements OnInit {
 
-  private magazineId = "";
+  private sellerId = "";
+  private email = "";
 
   constructor(private router: Router, private route: ActivatedRoute, private kpService: KpService) { 
     this.route.params.subscribe(params => {
-      this.magazineId = params['id'];
+      this.sellerId = params['id'];
     });
   }
 
   ngOnInit() {
+    this.kpService.getSeller(this.sellerId)
+    .subscribe(
+      res => {
+        this.email = res['email'];
+      },
+      err => {
+        console.log(err);
+      });
   }
 
   onSubmit(value, form){
     let body = value;
-    body['magazineId'] = this.magazineId;
+    body['email'] = this.email;
     console.log(body);
 
     this.kpService.addSeller(body)
       .subscribe(data => {
         //console.log(data);
-        window.location.replace("https://localhost:5004/potvrdinacineplacanja");
+        window.location.replace("https://localhost:5004/potvrdinacineplacanja");  //redirektuje se nazad u process dodavanja
         
       });
   }

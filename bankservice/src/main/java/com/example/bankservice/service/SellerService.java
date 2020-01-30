@@ -17,15 +17,14 @@ public class SellerService implements ISellerService {
 
 
     @Override
-    public SellerDto findByMagazineId(Long magazineId) {
-        Seller seller = sellerRepository.findByMagazineId(magazineId);
+    public SellerDto findByEmail(String email) {
+        Seller seller = sellerRepository.findByEmail(email);
         if(seller == null){
             return null;
         }
 
         SellerDto sellerDto = new SellerDto();
         sellerDto.setId(seller.getId());
-        sellerDto.setMagazineId(seller.getMagazineId());
         sellerDto.setMerchantId(seller.getMerchantId());
         sellerDto.setEmail(seller.getEmail());
         return sellerDto;
@@ -36,7 +35,6 @@ public class SellerService implements ISellerService {
         Seller seller = new Seller();
         seller.setMerchantId(sellerDto.getMerchantId());
         seller.setEmail(sellerDto.getEmail());
-        seller.setMagazineId(sellerDto.getMagazineId());
 
         try {
             sellerRepository.save(seller);

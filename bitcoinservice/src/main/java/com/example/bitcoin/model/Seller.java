@@ -16,9 +16,5 @@ public class Seller {
 
     @Column(name="api_token", nullable = false, unique = false)
     private String apiToken;
-
-    @Column(name="magazine_id", nullable = false, unique = true)
-    private Long magazineId;
-
 }
 

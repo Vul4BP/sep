@@ -15,7 +15,12 @@ public class Transaction {
 
     private BigDecimal amount;
 
-    private Boolean valid;
+    private String status;
+
+    @Column(unique = true)
+    private String orderId;
+
+    private String timestamp;
 
     @JsonIgnore
     @ToString.Exclude
@@ -25,5 +30,5 @@ public class Transaction {
     @JsonIgnore
     @ToString.Exclude
     @ManyToOne()
-    private Account recipient;
+    private Account merchant;
 }

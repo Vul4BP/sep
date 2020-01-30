@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SystemJsNgModuleLoader } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BankService } from 'src/service/bank.service';
@@ -18,7 +18,7 @@ export class FormabankeComponent implements OnInit {
 
   ngOnInit() {
     this.transaction = this.activatedRoute.snapshot.paramMap.get('transaction');
-    //console.log(this.transaction);
+    console.log(this.transaction);
   }
 
   submitForm(form: NgForm) {
@@ -32,7 +32,14 @@ export class FormabankeComponent implements OnInit {
           let url = data['url'] + data['id'];
           this.bankservice.changeStatus(url).subscribe(data => {
             console.log(data);
+            //redirektovati
+            let redirectUrl = data['redirectUrl'];
+            window.location.href = redirectUrl;
+            
           });
+        },
+        error => {
+          console.log(console.error);
         });
     }
   }

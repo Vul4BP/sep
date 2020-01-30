@@ -26,7 +26,11 @@ export class KpService {
     return this.httpClient.post('https://localhost:8443/paypalservice/seller/add', seller); 
   }
 
-  getMagazine(id : Object): Observable<any>{
-    return this.httpClient.get(`https://localhost:8443/sellerservice/magazine/get/${id}`);
+  getSeller(id : String): Observable<any>{
+    return this.httpClient.get(`https://localhost:8443/sellerservice/seller/get/${id}`);
+  }
+
+  getItem(id : String): Observable<any>{
+    return this.httpClient.get(`https://localhost:8443/sellerservice/item/get/${id}`);
   }
 }

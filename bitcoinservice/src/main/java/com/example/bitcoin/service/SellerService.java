@@ -14,15 +14,14 @@ public class SellerService implements ISellerService {
     }
 
     @Override
-    public SellerDto findByMagazineId(Long magazineId) {
-        Seller seller = sellerRepository.findByMagazineId(magazineId);
+    public SellerDto findByEmail(String email) {
+        Seller seller = sellerRepository.findByEmail(email);
         if(seller == null){
             return null;
         }
 
         SellerDto sellerDto = new SellerDto();
         sellerDto.setId(seller.getId());
-        sellerDto.setMagazineId(seller.getMagazineId());
         sellerDto.setApiToken(seller.getApiToken());
         sellerDto.setEmail(seller.getEmail());
         return sellerDto;
@@ -33,7 +32,6 @@ public class SellerService implements ISellerService {
         Seller seller = new Seller();
         seller.setApiToken(sellerDto.getApiToken());
         seller.setEmail(sellerDto.getEmail());
-        seller.setMagazineId(sellerDto.getMagazineId());
 
         try {
             sellerRepository.save(seller);
@@ -48,11 +46,6 @@ public class SellerService implements ISellerService {
     @Override
     public Seller findByApiToken(String apiToken) {
         return sellerRepository.findByApiToken(apiToken);
-    }
-
-    @Override
-    public Seller findByEmail(String email) {
-        return sellerRepository.findByEmail(email);
     }
 }
 

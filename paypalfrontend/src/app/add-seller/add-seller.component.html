@@ -1,9 +1,7 @@
 <div> 
     <form #f="ngForm" (ngSubmit)="onSubmit(f.value, f)" ngNativeValidate>
         <table>
-            <tr><td><label>Email: </label></td><td><input type="text" name="email" ngModel></td></tr>
-            <tr><td><label>Client Id: </label></td><td><input type="text" name="clientId" ngModel></td></tr>
-            <tr><td><label>Secret: </label></td><td><input type="text" name="secret" ngModel></td></tr>
+            <tr><td><label>Paypal Email: </label></td><td><input type="text" name="paypalEmail" ngModel></td></tr>
             <tr><td colspan="2"><input type="submit"></td></tr>
         </table>
     </form>

@@ -1,26 +1,21 @@
 package com.example.demo.payment;
 
-
 import com.example.demo.account.AccountService;
 import com.example.demo.account.AccountServiceImpl;
 import com.example.demo.model.Payment;
 import com.example.demo.card.CardDataDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpMethod;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/payment")
-@CrossOrigin("*")
 public class PaymentController {
-    private final Logger logger = LoggerFactory.getLogger(PaymentController.class);
     private final PaymentService paymentService;
     private final AccountService accountService;
 
@@ -29,22 +24,33 @@ public class PaymentController {
         this.accountService = accountService;
     }
 
+    //OVO SE POGADJA IZ MIKROSERVISA BANKE DA SE DOBIJE URL
     @PostMapping
-    public ExternalBankPaymentResponse postPaymentRequest(@RequestBody ExternalBankPaymentRequest kpRequestDto) {
-        logger.debug("Requesting payment");
-        logger.debug(String.format("Request: \n %s", kpRequestDto.toString()));
+    public ResponseEntity<?> postPaymentRequest(@RequestBody ExternalBankPaymentRequest kpRequestDto) {
+        ExternalBankPaymentResponse response = paymentService.handleKpRequest(kpRequestDto);
+        if(response == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
-        return paymentService.handleKpRequest(kpRequestDto);
+        return new ResponseEntity<ExternalBankPaymentResponse>(response, HttpStatus.OK);
+    }
+
+    //POST CARD DATA AND URL
+    @RequestMapping(value = "/{url}", method = RequestMethod.POST)
+    public ResponseEntity<?> postCardData(@RequestBody CardDataDto cardDataDto, @PathVariable String url) {
+        Payment payment = paymentService.findByUrl(url);
+        if(payment == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        List<String> lista = paymentService.submitCardData(cardDataDto, url);
+        String body = "{ \"url\" : \"" + lista.iterator().next() + "\", \"id\" : \"" + url + "\" }";
+        return new ResponseEntity<>(body, HttpStatus.OK);
+
     }
 
     @GetMapping("/{url}")
     public Payment getPaymentPage(@PathVariable String url) {
         return paymentService.findByUrl(url);
-    }
-
-    @RequestMapping(value = "/{url}", method = RequestMethod.POST)
-    public Map<String, String> postCardData(@RequestBody CardDataDto cardDataDto, @PathVariable String url) {
-        List<String> lista = paymentService.submitCardData(cardDataDto, url);
-        return Map.of("url", lista.iterator().next(), "id", url);
     }
 }

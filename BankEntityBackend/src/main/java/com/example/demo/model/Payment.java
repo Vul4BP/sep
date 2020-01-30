@@ -17,6 +17,8 @@ public class Payment {
 
     private BigDecimal amount;
 
+    private String status;
+
     private String successUrl;
 
     private String failedUrl;

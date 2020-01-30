@@ -13,10 +13,7 @@ public class Seller {
 
     @Column(name = "email", unique = false, nullable = false)
     private String email;
-
-    @Column(name = "magazine_id", unique = false, nullable = false)
-    private Long magazineId;
-
+    
     @Column(name = "merchant_id", unique = false, nullable = false)
     private String merchantId;
 

@@ -10,12 +10,7 @@ import { AddSellerComponent } from './add-seller/add-seller.component';
 
 const Routes = [
   {
-    path: '',
-    redirectTo: '/payment',
-    pathMatch: 'full'
-  },
-  {
-    path: "payment",
+    path: "payment/:id",
     component: PaymentComponent,
   },
   {

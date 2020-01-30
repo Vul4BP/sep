@@ -21,7 +21,7 @@ gnome-terminal --working-directory=/home/$1/Desktop/sep/zuul-service --command="
 sleep 10;
 
 #MIKROSERVISI
-gnome-terminal --working-directory=/home/$1/Desktop/sep/sellerservice --command="mvn spring-boot:run"
+#gnome-terminal --working-directory=/home/$1/Desktop/sep/sellerservice --command="mvn spring-boot:run"
 #gnome-terminal --working-directory=/home/$1/Desktop/sep/paypalservice --command="mvn spring-boot:run"
 #gnome-terminal --working-directory=/home/$1/Desktop/sep/bitcoinservice --command="mvn spring-boot:run"
 #gnome-terminal --working-directory=/home/$1/Desktop/sep/bankservice --command="mvn spring-boot:run"

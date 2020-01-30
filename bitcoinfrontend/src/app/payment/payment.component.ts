@@ -9,13 +9,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class PaymentComponent {
   amountUsd: string;
-  magazineId: string;
-  magazineName: string;
+  itemName: string;
+  email: string;
   paymentUrl = "";
+  itemId = ""
 
   constructor(private router: Router, private route: ActivatedRoute, private kpService: KpService) {
     this.route.params.subscribe(params => {
-      this.magazineId = params['id'];
+      this.itemId = params['id'];
     });
   }
 
@@ -26,21 +27,26 @@ export class PaymentComponent {
     document.getElementById('magazinePrice').style.visibility = "hidden";
     document.getElementById('paymentImg').style.visibility = "hidden";
 
-    this.kpService.getMagazine(this.magazineId)
-      .subscribe(data => {
-        this.amountUsd = data['clanarina'];
-        this.magazineId = data['casopisId'];
-        this.magazineName = data['naziv'];
+    this.kpService.getItem(this.itemId)
+      .subscribe(
+        resp => {
+          console.log(resp);
+          this.amountUsd = resp['amount'];
+          this.email = resp['seller']['email'];
+          this.itemName = resp['name'];
 
-        if(this.magazineId != null && this.amountUsd != null){
-          this.getPaymentLink();
+          if(this.email != null && this.amountUsd != null){
+            this.getPaymentLink();
+          }
+        },
+        err => {
+          console.log(err);
         }
-
-    })
+      );
   }
 
   getPaymentLink(){
-    this.kpService.startTransaction(this.magazineId, this.amountUsd)  
+    this.kpService.startTransaction(this.email, this.amountUsd)  
         .subscribe(data => {
           console.log(data);
           this.paymentUrl = data['paymentUrl'];
@@ -55,7 +61,7 @@ export class PaymentComponent {
           let magPrice = document.getElementById('magazinePrice');
           let magPriceLbl = document.getElementById('magazinePriceLbl');
 
-          magName.innerHTML = this.magazineName;
+          magName.innerHTML = this.itemName;
           magPrice.innerHTML = this.amountUsd + " USD";
           magNameLbl.innerHTML = "Magazine Name: ";
           magPriceLbl.innerHTML = "Magazine Price: ";

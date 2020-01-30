@@ -1,6 +1,5 @@
 package com.example.bankservice.service;
 
-import com.example.bankservice.Dto.CardDto;
 import com.example.bankservice.Dto.PaymentRequestDto;
 import com.example.bankservice.Dto.SellerDto;
 import com.example.bankservice.Dto.SendDataDto;
@@ -9,8 +8,6 @@ import com.example.bankservice.model.Payment;
 import com.example.bankservice.model.Seller;
 import com.example.bankservice.repository.PaymentRepository;
 import com.example.bankservice.repository.SellerRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
@@ -46,32 +43,22 @@ public class PaymentServ implements PaymentService {
     @Override
     public String handleRequest(PaymentRequestDto requestDto) {
 
-        Payment payment = new Payment();
         RestTemplate restTemplate = new RestTemplate();
-        ObjectMapper mapper = new ObjectMapper();
-
         SendDataDto sendDto = new SendDataDto();
+        SellerDto sellerDto = sellerService.findByEmail(requestDto.getEmail());
+
+        sendDto.setMerchantId(sellerDto.getMerchantId());
         sendDto.setAmount(requestDto.getAmount());
         sendDto.setErrorUrl(VarConfig.paymentErrorUrl);
-        sendDto.setFailedUrl(VarConfig.paymentCancelUrl);
+        sendDto.setFailedUrl(VarConfig.paymentFailedUrl);
         sendDto.setSuccessUrl(VarConfig.paymentSuccessUrl);
-
-        Long magId = Long.parseLong(requestDto.getMagazineId());
-        SellerDto sellerDto = sellerService.findByMagazineId(magId);
-        sendDto.setMerchantId(sellerDto.getMerchantId());
-
-        String body = "";
-        try {
-            body = mapper.writeValueAsString(sendDto);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> entity = new HttpEntity<String>(body, headers);
+        HttpEntity<SendDataDto> entity = new HttpEntity<SendDataDto>(sendDto, headers);
         ResponseEntity<String> response = restTemplate.postForEntity(VarConfig.bankPaymentUrl, entity, String.class);
 
+        Payment payment = new Payment();
         JSONObject actualObj = null;
         String urlStr = "";
 
@@ -83,16 +70,16 @@ public class PaymentServ implements PaymentService {
             e.printStackTrace();
         }
 
-        payment.setAmount(requestDto.getAmount());
-
         Seller seller = sellerRepository.findByMerchantId(sellerDto.getMerchantId());
         payment.setSeller(seller);
+        payment.setAmount(requestDto.getAmount());
 
         paymentRepository.save(payment);
+        //return VarConfig.bankFrontend + urlStr;
         return VarConfig.bankFrontend + urlStr;
-
     }
 
+    /*
     @Override
     public String useCardData(CardDto cardDto, String url) {
 
@@ -147,6 +134,7 @@ public class PaymentServ implements PaymentService {
 
         return urlStr;
     }
+    */
 
     @Override
     public String changeStatus(String url, String status) {

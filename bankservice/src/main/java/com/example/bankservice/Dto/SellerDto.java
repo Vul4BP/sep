@@ -7,5 +7,4 @@ public class SellerDto {
     private Long id;
     private String email;
     private String merchantId;
-    private Long magazineId;
 }

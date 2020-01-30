@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class PaymentController {
     private final Logger LOGGER = LoggerFactory.getLogger(PaymentController.class);
-
     private final PaymentService paymentService;
 
     public PaymentController(PaymentServ paymentService) {
@@ -26,18 +25,19 @@ public class PaymentController {
         return new ResponseEntity<String>(result, HttpStatus.OK);
     }
 
+    /*
     @RequestMapping(value = "/{url}", method = RequestMethod.POST)
     public ResponseEntity<String> useCardData(@RequestBody CardDto cardDto, @PathVariable String url) {
         return new ResponseEntity<String>("\""+paymentService.useCardData(cardDto, url)+"\"", HttpStatus.OK);
-    }
+    }*/
 
     @GetMapping("/success/{url}")
     public ResponseEntity<?> successPayment(@PathVariable String url) {
         LOGGER.info("Payment success");
         String redirect = paymentService.changeStatus(url,"Success");
-        return ResponseEntity.status(HttpStatus.FOUND).header("Location", redirect).build();
-        //String body = "{ \"res\" : \"Ok\" }";
-        //return new ResponseEntity<>(body, HttpStatus.OK);
+        //return ResponseEntity.status(HttpStatus.FOUND).header("Location", redirect).build();
+        String body = "{ \"redirectUrl\" : \""+ redirect +"\" }";
+        return new ResponseEntity<>(body, HttpStatus.OK);
 
     }
 
@@ -45,14 +45,18 @@ public class PaymentController {
     public ResponseEntity<?> errorPayment(@PathVariable String url) {
         LOGGER.info("Payment error");
         String redirect = paymentService.changeStatus(url,"Error");
-        return ResponseEntity.status(HttpStatus.FOUND).header("Location", redirect).build();
+        //return ResponseEntity.status(HttpStatus.FOUND).header("Location", redirect).build();
+        String body = "{ \"redirectUrl\" : \""+ redirect +"\" }";
+        return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
     @GetMapping("/failed/{url}")
     public ResponseEntity<?> failedPayment(@PathVariable String url) {
         LOGGER.info("Payment failed");
-        String redirect = paymentService.changeStatus(url,"Canceled");
-        return ResponseEntity.status(HttpStatus.FOUND).header("Location", redirect).build();
+        String redirect = paymentService.changeStatus(url,"Failed");
+        //return ResponseEntity.status(HttpStatus.FOUND).header("Location", redirect).build();
+        String body = "{ \"redirectUrl\" : \""+ redirect +"\" }";
+        return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
 }
