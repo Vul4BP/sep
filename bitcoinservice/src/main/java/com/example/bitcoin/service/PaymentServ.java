@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PaymentServ implements PaymentService {
     private final Logger LOGGER = LoggerFactory.getLogger(PaymentServ.class);
@@ -57,6 +59,11 @@ public class PaymentServ implements PaymentService {
         LOGGER.info("Persisting payment: " + payment.toString());
 
         return paymentRepository.save(payment);
+    }
+
+    @Override
+    public List<Payment> findAllByStatus(String status) {
+        return paymentRepository.getAllByStatus(status);
     }
 
     @Override

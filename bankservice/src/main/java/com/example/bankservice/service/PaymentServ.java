@@ -23,9 +23,6 @@ import java.util.List;
 @Service
 public class PaymentServ implements PaymentService {
 
-    private static final String PAYMENT_URL_F = "%s/card/%s";
-    public static final String NOT_FOUND = "notFound";
-
     @Autowired
     private PaymentRepository paymentRepository;
 
@@ -73,74 +70,26 @@ public class PaymentServ implements PaymentService {
         Seller seller = sellerRepository.findByMerchantId(sellerDto.getMerchantId());
         payment.setSeller(seller);
         payment.setAmount(requestDto.getAmount());
+        payment.setStatus(VarConfig.paymentStatusCreated);
 
         paymentRepository.save(payment);
-        //return VarConfig.bankFrontend + urlStr;
-        return VarConfig.bankFrontend + urlStr;
+        return VarConfig.bankFrontend + generateRedirectUrl(urlStr);
     }
 
-    /*
-    @Override
-    public String useCardData(CardDto cardDto, String url) {
-
-        RestTemplate restTemplate = new RestTemplate();
-        String fooResourceUrl = VarConfig.bankPaymentUrl + url;
-
-        ObjectMapper mapper = new ObjectMapper();
-        CardDto cd = new CardDto();
-
-        cd.setPan(cardDto.getPan());
-        cd.setHolderName(cardDto.getHolderName());
-        cd.setSecurityCode(cardDto.getSecurityCode());
-        cd.setValidTo(cardDto.getValidTo());
-
-        String body = "";
-        try {
-            body = mapper.writeValueAsString(cd);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<String> entity = new HttpEntity<String>(body, headers);
-
-        ResponseEntity<String> response = restTemplate.postForEntity(fooResourceUrl, entity, String.class);
-        System.out.println(response.getBody());
-
-        JSONObject actualObj = null;
-        String urlStr = "";
-        String placenoStr = "";
-
-        try {
-            actualObj = new JSONObject(response.getBody());
-            urlStr = actualObj.getString("url");
-            placenoStr = actualObj.getString("placeno");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        Payment payment = paymentRepository.findOneByUrl("banka/card/" + url);
-        Payment savedPayment = new Payment();
-
-        if (placenoStr.equals("true")) {
-            payment.setStatus("Success");
-        } else {
-            payment.setStatus("Canceled");
-        }
-
-        savedPayment = paymentRepository.save(payment);
-
-        return urlStr;
+    private String generateRedirectUrl(String url) {
+        return "banka/card/" + url;
     }
-    */
 
     @Override
     public String changeStatus(String url, String status) {
-        Payment payment = paymentRepository.findOneByUrl("banka/card/" + url);
+        Payment payment = paymentRepository.findOneByUrl(url);
         payment.setStatus(status);
         paymentRepository.save(payment);
         return VarConfig.paymentRedirectUrl;
+    }
+
+    @Override
+    public List<Payment> findAllByStatus(String status) {
+        return paymentRepository.getAllByStatus(status);
     }
 }

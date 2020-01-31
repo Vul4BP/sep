@@ -55,7 +55,10 @@ public class BitcoinController {
     @GetMapping("/success/{paymentId}")
     public ResponseEntity<?> getPaymentSuccess(@PathVariable Long paymentId) {
         LOGGER.info("Handling successful payment");
-        return getRedirectUrl(paymentId);
+        //return getRedirectUrl(paymentId);
+        //--------------TEST-------------
+        String redirectUrl = VarConfig.paymentRedirectUrl;
+        return ResponseEntity.status(HttpStatus.FOUND).header("Location", redirectUrl).build();
     }
 
     @GetMapping("/cancel/{paymentId}")

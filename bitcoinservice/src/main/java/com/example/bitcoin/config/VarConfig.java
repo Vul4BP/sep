@@ -1,6 +1,8 @@
 package com.example.bitcoin.config;
 
 public class VarConfig {
+    public static String paymentStatusCreated = "new";
+
     public static String paymentCurrency = "USD";
     public static String paymentTitle = "Order";
     public static String paymentSuccessUrl = "https://localhost:8443/bitcoinservice/success/";

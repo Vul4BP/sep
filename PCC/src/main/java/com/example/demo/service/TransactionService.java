@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.config.VarConfig;
 import com.example.demo.dto.RequestDto;
 import com.example.demo.dto.ResponseDto;
 import com.example.demo.model.BankUrl;
@@ -12,8 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class TransactionService implements ITransactionService {
@@ -48,7 +47,7 @@ public class TransactionService implements ITransactionService {
         if (bankUrl == null) {
             System.out.println("------ DOGODILA SE GRESKA ------");
 
-            transaction.setStatus("Error"); //ne postoji banka platioca
+            transaction.setStatus(VarConfig.paymentStatusError); //ne postoji banka platioca
             transactionRepository.save(transaction);
 
             response.setStatus(transaction.getStatus());
@@ -66,7 +65,7 @@ public class TransactionService implements ITransactionService {
         if (responseFromIssuer.getStatusCode().isError()) {
             System.out.println("------ DOGODILA SE GRESKA ------");
 
-            transaction.setStatus("Error"); //desila se neka greska
+            transaction.setStatus(VarConfig.paymentStatusError); //desila se neka greska
             transactionRepository.save(transaction);
 
             response.setStatus(transaction.getStatus());

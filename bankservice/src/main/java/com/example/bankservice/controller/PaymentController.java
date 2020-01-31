@@ -2,6 +2,7 @@ package com.example.bankservice.controller;
 
 import com.example.bankservice.Dto.CardDto;
 import com.example.bankservice.Dto.PaymentRequestDto;
+import com.example.bankservice.config.VarConfig;
 import com.example.bankservice.service.PaymentServ;
 import com.example.bankservice.service.PaymentService;
 import org.slf4j.Logger;
@@ -34,7 +35,7 @@ public class PaymentController {
     @GetMapping("/success/{url}")
     public ResponseEntity<?> successPayment(@PathVariable String url) {
         LOGGER.info("Payment success");
-        String redirect = paymentService.changeStatus(url,"Success");
+        String redirect = paymentService.changeStatus(url, VarConfig.paymentStatusSuccess);
         //return ResponseEntity.status(HttpStatus.FOUND).header("Location", redirect).build();
         String body = "{ \"redirectUrl\" : \""+ redirect +"\" }";
         return new ResponseEntity<>(body, HttpStatus.OK);
@@ -44,7 +45,7 @@ public class PaymentController {
     @GetMapping("/error/{url}")
     public ResponseEntity<?> errorPayment(@PathVariable String url) {
         LOGGER.info("Payment error");
-        String redirect = paymentService.changeStatus(url,"Error");
+        String redirect = paymentService.changeStatus(url,VarConfig.paymentStatusError);
         //return ResponseEntity.status(HttpStatus.FOUND).header("Location", redirect).build();
         String body = "{ \"redirectUrl\" : \""+ redirect +"\" }";
         return new ResponseEntity<>(body, HttpStatus.OK);
@@ -53,7 +54,7 @@ public class PaymentController {
     @GetMapping("/failed/{url}")
     public ResponseEntity<?> failedPayment(@PathVariable String url) {
         LOGGER.info("Payment failed");
-        String redirect = paymentService.changeStatus(url,"Failed");
+        String redirect = paymentService.changeStatus(url,VarConfig.paymentStatusFailed);
         //return ResponseEntity.status(HttpStatus.FOUND).header("Location", redirect).build();
         String body = "{ \"redirectUrl\" : \""+ redirect +"\" }";
         return new ResponseEntity<>(body, HttpStatus.OK);

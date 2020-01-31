@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 
+import com.example.demo.config.VarConfig;
 import com.example.demo.dto.CardDto;
 import com.example.demo.dto.RequestDto;
 import com.example.demo.dto.ResponseDto;
@@ -54,9 +55,6 @@ public class TransactionService implements ITransactionService {
             return saveErrorTransaction(transaction);
         }
 
-        //System.out.println("Pan: \t" + card.getPan());
-        //System.out.println("Holder: \t" + card.getHolderName());
-
         if (!card.getSecurityCode().toString().equals(cardDto.getSecurityCode().toString())) {
             return saveErrorTransaction(transaction);
         }else if(!card.getValidTo().toString().equals(cardDto.getValidTo().toString())) {
@@ -70,13 +68,13 @@ public class TransactionService implements ITransactionService {
         Account account = card.getAccount();
 
         if (account.getAmount().compareTo(transaction.getAmount()) < 0) {
-            transaction.setStatus("Failed");
+            transaction.setStatus(VarConfig.paymentStatusFailed);
             System.out.println("------ TRANSAKCIJA -> FAILED ------");
         } else {
             account.setAmount(account.getAmount().subtract(transaction.getAmount()));
             accountRepository.save(account);
 
-            transaction.setStatus("Success");
+            transaction.setStatus(VarConfig.paymentStatusSuccess);
             System.out.println("------ TRANSAKCIJA -> SUCCESS ------");
         }
         transactionRepository.save(transaction);
@@ -103,7 +101,7 @@ public class TransactionService implements ITransactionService {
 
     private ResponseDto saveErrorTransaction(Transaction transaction){
 
-        transaction.setStatus("Error");
+        transaction.setStatus(VarConfig.paymentStatusError);
         transactionRepository.save(transaction);
 
         System.out.println("------ DOGODILA SE GRESKA ------");

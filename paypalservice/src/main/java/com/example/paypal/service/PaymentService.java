@@ -13,12 +13,10 @@ import com.example.paypal.utils.MyPaymentUtils;
 import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
-import org.aspectj.weaver.ast.Var;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +69,7 @@ public class PaymentService implements IPaymentService{
         myPayment.setAmount(request.getAmount());
         myPayment.setSeller(seller);
         myPayment.setPaymentId(createdPayment.getId());
+        myPayment.setStatus(createdPayment.getState());
         paymentRepository.save(myPayment);
 
         CreatePaymentResponseDto res = new CreatePaymentResponseDto();
@@ -112,7 +111,8 @@ public class PaymentService implements IPaymentService{
 
             LOGGER.info("Capture id=" + responseCapture.getId() + " and status=" + responseCapture.getState());
 
-            myPayment.setStatus("Success");
+            //--------------------TEST---------------------
+            //myPayment.setStatus("Success");
             paymentRepository.save(myPayment);
 
             LOGGER.info("Executed payment - Request: \n" + Payment.getLastRequest());
@@ -127,10 +127,15 @@ public class PaymentService implements IPaymentService{
     }
 
     @Override
+    public List<MyPayment> findAllByStatus(String status) {
+        return paymentRepository.getAllByStatus(status);
+    }
+
+    @Override
     public String cancelPayment(Long id) {
         LOGGER.error("Payment canceled...");
         MyPayment myPayment = paymentRepository.getOne(id);
-        myPayment.setStatus("Canceled");
+        myPayment.setStatus(VarConfig.paymentStatusFailed);
         paymentRepository.save(myPayment);
         return VarConfig.returnUrl;
     }
@@ -139,7 +144,7 @@ public class PaymentService implements IPaymentService{
     public String errorPayment(Long id) {
         LOGGER.error("Error in payment...");
         MyPayment myPayment = paymentRepository.getOne(id);
-        myPayment.setStatus("Error");
+        myPayment.setStatus(VarConfig.paymentStatusError);
         paymentRepository.save(myPayment);
         return VarConfig.returnUrl;
     }

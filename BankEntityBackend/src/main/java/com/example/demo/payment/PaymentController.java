@@ -4,14 +4,10 @@ import com.example.demo.account.AccountService;
 import com.example.demo.account.AccountServiceImpl;
 import com.example.demo.model.Payment;
 import com.example.demo.card.CardDataDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/payment")
@@ -47,6 +43,17 @@ public class PaymentController {
         String body = "{ \"url\" : \"" + lista.iterator().next() + "\", \"id\" : \"" + url + "\" }";
         return new ResponseEntity<>(body, HttpStatus.OK);
 
+    }
+
+    //OVO SE POGADJA ZA PROVERU STATUSA IZ TASKA
+    @GetMapping("/get/{url}")
+    public ResponseEntity<?> getByUrl(@PathVariable String url){
+        Payment payment = paymentService.findByUrl(url);
+        if(payment == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(payment.getStatus(), HttpStatus.OK);
     }
 
     @GetMapping("/{url}")

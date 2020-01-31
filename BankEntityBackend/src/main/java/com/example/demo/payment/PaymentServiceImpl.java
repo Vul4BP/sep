@@ -3,6 +3,7 @@ package com.example.demo.payment;
 import com.example.demo.account.AccountService;
 import com.example.demo.card.CardService;
 import com.example.demo.client.ClientService;
+import com.example.demo.config.VarConfig;
 import com.example.demo.model.*;
 import com.example.demo.transaction.TransactionRepository;
 import com.example.demo.transaction.TransactionService;
@@ -16,8 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -59,13 +58,14 @@ public class PaymentServiceImpl implements PaymentService {
             payment.setFailedUrl(kpRequestDto.getFailedUrl());  //neuspesno
             payment.setErrorUrl(kpRequestDto.getErrorUrl());    //greska
             payment.setMerchantAccount(client.getAccount());    //profil primaoca sredstava
+            payment.setStatus(VarConfig.paymentStatusCreated);
             //id -> baza, status -> kasnije
 
             paymentRepository.save(payment);
             System.out.println("------ ZAHTEV JE USPESNO IZGENERISAN ------");
         }
 
-        response.setUrl(generateRedirectUrl(payment.getUrl()));
+        response.setUrl(payment.getUrl());
         response.setId(payment.getId());
 
         return response;
@@ -80,8 +80,6 @@ public class PaymentServiceImpl implements PaymentService {
         String redirectUrl = "";
 
         Payment payment = paymentRepository.findByUrl(url);
-        //System.out.println("Id: \t" + payment.getId());
-        //System.out.println("Url: \t" + payment.getUrl());
 
         Transaction transaction = new Transaction();
         transaction.setMerchant(payment.getMerchantAccount());  //profil primaoca sredstava
@@ -138,7 +136,7 @@ public class PaymentServiceImpl implements PaymentService {
                 transaction.setStatus(responseBody.getStatus());
                 payment.setStatus(responseBody.getStatus());
 
-                if(payment.getStatus().equals("Error")){
+                if(payment.getStatus().equals(VarConfig.paymentStatusError)){
                     System.out.println("------ TRANSAKCIJA -> ERROR ------");
                     redirectUrl = payment.getErrorUrl();
                 }else{
@@ -157,8 +155,6 @@ public class PaymentServiceImpl implements PaymentService {
 
         System.out.println("------ KARTICA SE NALAZI U ACQUIRER-u ------");
         //KARTICA KUPCA SE NALAZI U ISTOJ BANCI, PROVERAVAJU SE OSTALI PODACI
-        //System.out.println("Pan: \t" + cardDataDto.getPan());
-        //System.out.println("Holder: \t" + card.getHolderName());
 
         if (!card.getSecurityCode().toString().equals(cardDataDto.getSecurityCode().toString())) {
             return saveErrorTransaction(payment, transaction);
@@ -174,7 +170,7 @@ public class PaymentServiceImpl implements PaymentService {
         Account account = card.getAccount();
 
         if (account.getAmount().compareTo(payment.getAmount()) < 0) {
-            transaction.setStatus("Failed");
+            transaction.setStatus(VarConfig.paymentStatusFailed);
             payment.setStatus(transaction.getStatus());
             redirectUrl = payment.getFailedUrl();
             System.out.println("------ TRANSAKCIJA -> FAILED ------");
@@ -186,7 +182,7 @@ public class PaymentServiceImpl implements PaymentService {
             accountService.save(account);
             accountService.save(merchant);
 
-            transaction.setStatus("Success");
+            transaction.setStatus(VarConfig.paymentStatusSuccess);
             payment.setStatus(transaction.getStatus());
             redirectUrl = payment.getSuccessUrl();
             System.out.println("------ TRANSAKCIJA -> SUCCESS ------");
@@ -226,14 +222,10 @@ public class PaymentServiceImpl implements PaymentService {
         return String.valueOf(System.currentTimeMillis());
     }
 
-    private String generateRedirectUrl(String url) {
-        return "banka/card/" + url;
-    }
-
     private List<String> saveErrorTransaction(Payment payment, Transaction transaction){
         List<String> list = new ArrayList<>();
 
-        transaction.setStatus("Error");
+        transaction.setStatus(VarConfig.paymentStatusError);
         transactionRepository.save(transaction);
 
         payment.setStatus(transaction.getStatus());
